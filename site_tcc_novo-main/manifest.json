@@ -1,0 +1,16 @@
+{
+  "name": "Spatial Core SENAI",
+  "short_name": "SpatialCore",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#05070a",
+  "theme_color": "#06b6d4",
+  "description": "Suporte Neural Meta Quest 3S",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2103/2103633.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
