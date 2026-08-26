@@ -6,7 +6,6 @@ require_once 'config.php';
 
 function render_login_icon(string $name, string $class = ''): string
 {
-    
     $base = 'aria-hidden="true" class="' . $class . '" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"';
     $icons = [
         'vrpano' => '<svg ' . $base . '><path d="M4 7.5C4 6.12 5.12 5 6.5 5h11C18.88 5 20 6.12 20 7.5v6c0 1.38-1.12 2.5-2.5 2.5H14l-2 2-2-2H6.5C5.12 16 4 14.88 4 13.5v-6Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 9.5h6M8.5 12h7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
@@ -21,7 +20,6 @@ function render_login_icon(string $name, string $class = ''): string
 }
 
 $erro = '';
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario = trim($_POST['usuario'] ?? '');
@@ -53,6 +51,14 @@ $icon_arrow = render_login_icon('arrow_forward', 'w-5 h-5');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SENAI VR | Iniciar sessão</title>
+    
+    <!-- FORÇA SAIR DO LAYOUT SE ESTIVER CARREGADO DENTRO DE UMA CONTAINER/IFRAME DA PAINEL -->
+    <script>
+        if (window.top !== window.self || document.querySelector('.scroller-limpo')) {
+            window.top.location.href = window.location.href;
+        }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -247,7 +253,6 @@ $icon_arrow = render_login_icon('arrow_forward', 'w-5 h-5');
             const bolinhasExistentes = document.querySelectorAll('.bg-emerald-500, .bg-green-500, span[class*="rounded-full"]');
             
             bolinhasExistentes.forEach(bolinha => {
-                // Verifica se é uma bolinha pequena (evita pegar cards ou containers redondos)
                 if (bolinha.offsetWidth <= 16 || bolinha.offsetHeight <= 16) {
                     bolinha.classList.add('animate-pulse');
                     bolinha.style.backgroundColor = '#10b981';
@@ -262,7 +267,6 @@ $icon_arrow = render_login_icon('arrow_forward', 'w-5 h-5');
                 if (el.children.length === 0 && el.textContent) {
                     const texto = el.textContent.trim().toUpperCase();
                     
-                    // Se for o texto "ONLINE" do card de estado
                     if (texto === 'ONLINE') {
                         if (!el.innerHTML.includes('dot-verde-solida')) {
                             const bolinhaHTML = `<span class="dot-verde-solida animate-pulse" style="
@@ -284,7 +288,5 @@ $icon_arrow = render_login_icon('arrow_forward', 'w-5 h-5');
             
         });
     </script>
-
-    
 </body>
 </html>

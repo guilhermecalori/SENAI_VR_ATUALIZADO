@@ -43,11 +43,11 @@ if (file_exists('../layout.php')) {
 
 $nome_usuario = $_SESSION['usuario_nome'] ?? $_SESSION['usuario_logado'] ?? 'Teste';
 
-$icon_antenna    = function_exists('render_icon') ? render_icon('settings_input_antenna', 'w-4 h-4 text-cyan-600 inline-block align-middle') : '';
-$icon_security   = function_exists('render_icon') ? render_icon('security', 'w-5 h-5 text-slate-500') : '';
-$icon_lock_open  = function_exists('render_icon') ? render_icon('lock_open', 'w-8 h-8 text-cyan-600 transition-transform') : '';
+$icon_antenna     = function_exists('render_icon') ? render_icon('settings_input_antenna', 'w-4 h-4 text-cyan-600 inline-block align-middle') : '';
+$icon_security    = function_exists('render_icon') ? render_icon('security', 'w-5 h-5 text-slate-500') : '';
+$icon_lock_open   = function_exists('render_icon') ? render_icon('lock_open', 'w-8 h-8 text-cyan-600 transition-transform') : '';
 $icon_lock_closed = function_exists('render_icon') ? render_icon('lock', 'w-8 h-8 text-red-600 transition-transform') : '';
-$icon_privacy    = function_exists('render_icon') ? render_icon('visibility_off', 'w-8 h-8 text-purple-600 group-hover:scale-105 transition-transform id="svg-privacy"') : '';
+$icon_privacy     = function_exists('render_icon') ? render_icon('visibility_off', 'w-8 h-8 text-purple-600 group-hover:scale-105 transition-transform id="svg-privacy"') : '';
 
 $svg_wifi_on = '<svg class="w-8 h-8 text-emerald-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.14 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path></svg>';
 $svg_wifi_off = '<svg class="w-8 h-8 text-orange-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18M12 20h.01m-4.242-3.596a5.5 5.5 0 015.656-.828m3.987 1.838a5.498 5.498 0 00-1.127-1.01M4.929 12.929a10 10 0 0113.142-1.2m2.071 2.071a9.96 9.96 0 001.216-1.78M1.394 9.393a15 15 0 0119.544-1.353"></path></svg>';
@@ -146,6 +146,12 @@ $conteudo = <<<HTML
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
+    /* Estilo visual para desativar os botões de saída quando travado */
+    .btn-sair-desativado {
+        opacity: 0.4 !important;
+        cursor: not-allowed !allowed !important;
+        pointer-events: none !important;
+    }
 </style>
 
 <script>
@@ -166,12 +172,14 @@ $conteudo = <<<HTML
 
     function entraTelaCheia() {
         let elem = document.documentElement;
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen().catch(() => {});
-        } else if (elem.webkitRequestFullscreen) {
-            elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) {
-            elem.msRequestFullscreen();
+        if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(() => {});
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
         }
     }
 
@@ -252,6 +260,18 @@ $conteudo = <<<HTML
         const btn = document.getElementById('btn-travar');
         const iconContainer = document.getElementById('lock-icon-container');
 
+        // BLOQUEIO/DESBLOQUEIO VISUAL DE BOTÕES DE SAIR/LOGOUT
+        const elementosSair = document.querySelectorAll('a[href*="logout"], a[href*="sair"], button[onclick*="logout"], .btn-logout, #btn-sair');
+        elementosSair.forEach(el => {
+            if (travado) {
+                el.classList.add('btn-sair-desativado');
+                el.setAttribute('tabindex', '-1');
+            } else {
+                el.classList.remove('btn-sair-desativado');
+                el.removeAttribute('tabindex');
+            }
+        });
+
         if (!badge || !label) return;
 
         if (travado) {
@@ -282,6 +302,26 @@ $conteudo = <<<HTML
             }
         }
     }
+
+    // INTERCEPTADOR DE CLIQUE GLOBAL PARA BLOQUEAR AÇÕES DE SAÍDA E LOGOUT
+    document.addEventListener('click', function(e) {
+        if (!estaMenuTravado()) return;
+
+        // Procura se o elemento clicado (ou seus pais) é um botão/link de saída
+        const alvo = e.target.closest('a[href*="logout"], a[href*="sair"], button[onclick*="logout"], .btn-logout, #btn-sair');
+        
+        if (alvo) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            return false;
+        }
+
+        // Mantém a tela cheia ativa em qualquer outro clique
+        if (!document.fullscreenElement) {
+            entraTelaCheia();
+        }
+    }, true);
 
     document.addEventListener('keydown', function(e) {
         const modal = document.getElementById('modal-senha');
@@ -316,17 +356,17 @@ $conteudo = <<<HTML
         }
     }, true);
 
-    document.addEventListener('click', () => {
-        if (estaMenuTravado() && !document.fullscreenElement) {
-            entraTelaCheia();
+    const reengajarFullscreen = () => {
+        if (estaMenuTravado() && (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement)) {
+            setTimeout(entraTelaCheia, 50);
         }
-    });
+    };
 
-    document.addEventListener('fullscreenchange', () => {
-        if (!document.fullscreenElement && estaMenuTravado()) {
-            entraTelaCheia();
-        }
-    });
+    document.addEventListener('fullscreenchange', reengajarFullscreen);
+    document.addEventListener('webkitfullscreenchange', reengajarFullscreen);
+    document.addEventListener('mozfullscreenchange', reengajarFullscreen);
+    document.addEventListener('MSFullscreenChange', reengajarFullscreen);
+    window.addEventListener('resize', reengajarFullscreen);
 
     function aplicarPrivacidadeUI(ativo) {
         const btn = document.getElementById('btn-privacidade');
