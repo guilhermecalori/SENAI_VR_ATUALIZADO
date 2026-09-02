@@ -4,68 +4,171 @@ if (!isset($_SESSION['usuario_logado'])) {
     header("Location: ../login.php");
     exit();
 }
-require_once '../layout.php';
 
-$materias = [
-    ['nome' => 'Biologia', 'icon' => 'science', 'cor' => 'emerald', 'desc' => 'Células, anatomia e ecossistemas em 3D.', 'link' => 'materia_biologia.php'],
-    ['nome' => 'Português', 'icon' => 'auto_stories', 'cor' => 'blue', 'desc' => 'Literatura e gramática aplicada imersiva.', 'link' => 'materia_portugues.php'],
-    ['nome' => 'Matemática', 'icon' => 'calculate', 'cor' => 'purple', 'desc' => 'Geometria espacial e cálculos visualizados.', 'link' => 'materia_matematica.php'],
-    ['nome' => 'Física', 'icon' => 'precision_manufacturing', 'cor' => 'orange', 'desc' => 'Simulações de leis da física e mecânica.', 'link' => 'materia_fisica.php'],
-    ['nome' => 'Química', 'icon' => 'science', 'cor' => 'cyan', 'desc' => 'Laboratório de reações e estruturas atômicas.', 'link' => 'materia_quimica.php'],
-    ['nome' => 'História', 'icon' => 'history', 'cor' => 'rose', 'desc' => 'Viagens no tempo para grandes eventos.', 'link' => 'materia_historia.php'],
-    ['nome' => 'Geografia', 'icon' => 'public', 'cor' => 'lime', 'desc' => 'Geopolítica e análise de terrenos globais.', 'link' => 'materia_geografia.php'],
-    ['nome' => 'Inglês', 'icon' => 'translate', 'cor' => 'indigo', 'desc' => 'Prática de conversação em cenários reais.', 'link' => 'materia_ingles.php'],
-    ['nome' => 'Sociologia', 'icon' => 'groups', 'cor' => 'amber', 'desc' => 'Estudo das estruturas sociais e interação humana.', 'link' => 'materia_sociologia.php'],
-    ['nome' => 'Filosofia', 'icon' => 'psychology_alt', 'cor' => 'violet', 'desc' => 'O pensamento humano e grandes dilemas éticos.', 'link' => 'materia_filosofia.php'],
-    ['nome' => 'Artes', 'icon' => 'palette', 'cor' => 'pink', 'desc' => 'Exposição de galerias virtuais e criação 3D.', 'link' => 'materia_artes.php'],
-];
-
-$conteudo = "
-<div class='p-6 md:p-8 animate-in fade-in duration-700 bg-transparent'>
-    <div class='max-w-6xl mx-auto space-y-8'>
-        
-        <header class='mb-2'>
-            <h1 class='text-3xl font-bold text-slate-900 tracking-tight mb-2'>Módulos de Aprendizado</h1>
-            <p class='text-slate-500 text-sm'>Selecione uma disciplina para iniciar a experiência em realidade virtual.</p>
-        </header>
-
-        <div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>";
-
-foreach ($materias as $m) {
-    $materia_icon = render_icon($m['icon'], "w-5 h-5 text-{$m['cor']}-600");
-    $arrow_icon = render_icon('arrow_outward', "w-4 h-4 text-slate-400 group-hover:text-{$m['cor']}-600 transition-colors duration-300");
-
-    $conteudo .= "
-            <a href='{$m['link']}' class='glass group p-6 rounded-2xl border border-slate-200 bg-white hover:border-{$m['cor']}-300 hover:shadow-md transition-all duration-300 flex flex-col justify-between'>
-                <div>
-                    <div class='flex justify-between items-start mb-5'>
-                        <div class='w-11 h-11 bg-{$m['cor']}-50 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform duration-300'>
-                            {$materia_icon}
-                        </div>
-                        <div class='pt-1'>
-                            {$arrow_icon}
-                        </div>
-                    </div>
-                    
-                    <h3 class='text-lg font-bold text-slate-800 mb-2 tracking-tight'>{$m['nome']}</h3>
-                    <p class='text-slate-500 text-xs leading-relaxed mb-6'>
-                        {$m['desc']}
-                    </p>
-                </div>
-                
-                <div class='h-1 w-full bg-slate-100 rounded-full overflow-hidden shrink-0 mt-auto'>
-                    <div class='h-full bg-{$m['cor']}-500 w-1/4 group-hover:w-full transition-all duration-700 ease-out'></div>
-                </div>
-            </a>";
+if (file_exists(__DIR__ . '/layout.php')) {
+    require_once __DIR__ . '/layout.php';
+} else {
+    require_once __DIR__ . '/../layout.php';
 }
 
-$conteudo .= "
+// Mapeamento usando Hexadecimal/RGB para garantir exibição perfeita sem falhas de Tailwind
+$materias = [
+    [
+        'nome' => 'Biologia', 
+        'icon' => 'science', 
+        'desc' => 'Células, anatomia e ecossistemas em 3D.', 
+        'link' => 'materia_biologia.php',
+        'cor'  => '#10b981', // Emerald
+        'bg'   => '#ecfdf5'
+    ],
+    [
+        'nome' => 'Português', 
+        'icon' => 'auto_stories', 
+        'desc' => 'Literatura e gramática aplicada imersiva.', 
+        'link' => 'materia_portugues.php',
+        'cor'  => '#2563eb', // Blue
+        'bg'   => '#eff6ff'
+    ],
+    [
+        'nome' => 'Matemática', 
+        'icon' => 'calculate', 
+        'desc' => 'Geometria espacial e cálculos visualizados.', 
+        'link' => 'materia_matematica.php',
+        'cor'  => '#9333ea', // Purple
+        'bg'   => '#faf5ff'
+    ],
+    [
+        'nome' => 'Física', 
+        'icon' => 'precision_manufacturing', 
+        'desc' => 'Simulações de leis da física e mecânica.', 
+        'link' => 'materia_fisica.php',
+        'cor'  => '#ea580c', // Orange
+        'bg'   => '#fff7ed'
+    ],
+    [
+        'nome' => 'Química', 
+        'icon' => 'science', 
+        'desc' => 'Laboratório de reações e estruturas atômicas.', 
+        'link' => 'materia_quimica.php',
+        'cor'  => '#0891b2', // Cyan (Garantido!)
+        'bg'   => '#ecfeff'
+    ],
+    [
+        'nome' => 'História', 
+        'icon' => 'history', 
+        'desc' => 'Viagens no tempo para grandes eventos.', 
+        'link' => 'materia_historia.php',
+        'cor'  => '#e11d48', // Rose
+        'bg'   => '#fff1f2'
+    ],
+    [
+        'nome' => 'Geografia', 
+        'icon' => 'public', 
+        'desc' => 'Geopolítica e análise de terrenos globais.', 
+        'link' => 'materia_geografia.php',
+        'cor'  => '#65a30d', // Lime
+        'bg'   => '#f7fee7'
+    ],
+    [
+        'nome' => 'Inglês', 
+        'icon' => 'translate', 
+        'desc' => 'Prática de conversação em cenários reais.', 
+        'link' => 'materia_ingles.php',
+        'cor'  => '#4f46e5', // Indigo
+        'bg'   => '#eef2ff'
+    ],
+    [
+        'nome' => 'Sociologia', 
+        'icon' => 'groups', 
+        'desc' => 'Estudo das estruturas sociais e interação humana.', 
+        'link' => 'materia_sociologia.php',
+        'cor'  => '#d97706', // Amber
+        'bg'   => '#fffbeb'
+    ],
+    [
+        'nome' => 'Filosofia', 
+        'icon' => 'psychology_alt', 
+        'desc' => 'O pensamento humano e grandes dilemas éticos.', 
+        'link' => 'materia_filosofia.php',
+        'cor'  => '#7c3aed', // Violet
+        'bg'   => '#f5f3ff'
+    ],
+    [
+        'nome' => 'Artes', 
+        'icon' => 'palette', 
+        'desc' => 'Exposição de galerias virtuais e criação 3D.', 
+        'link' => 'materia_artes.php',
+        'cor'  => '#db2777', // Pink
+        'bg'   => '#fdf2f8'
+    ],
+];
+
+ob_start();
+?>
+
+<style>
+    /* Estilo para garantir a animação suave do preenchimento da barra */
+    .card-materia .bar-fill {
+        width: 25%;
+        transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card-materia:hover .bar-fill {
+        width: 100% !important;
+    }
+</style>
+
+<div class="p-6 md:p-8 animate-in fade-in duration-700 bg-transparent">
+    <div class="max-w-6xl mx-auto space-y-8">
+        
+        <header class="mb-2">
+            <h1 class="text-3xl font-bold text-slate-900 tracking-tight mb-2">Módulos de Aprendizado</h1>
+            <p class="text-slate-500 text-sm">Selecione uma disciplina para iniciar a experiência em realidade virtual.</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <?php foreach ($materias as $m): ?>
+                <?php 
+                    $materia_icon = function_exists('render_icon') 
+                        ? render_icon($m['icon'], "w-5 h-5") 
+                        : "<span class='material-symbols-outlined text-xl'>{$m['icon']}</span>";
+                    
+                    $arrow_icon = function_exists('render_icon') 
+                        ? render_icon('arrow_outward', "w-4 h-4 text-slate-400 group-hover:text-slate-700 transition-colors duration-300") 
+                        : "<span class='material-symbols-outlined text-slate-400 group-hover:text-slate-700 transition-colors duration-300 text-sm'>arrow_outward</span>";
+                ?>
+                
+                <a href="<?php echo $m['link']; ?>" 
+                   class="card-materia glass group p-6 rounded-2xl border border-slate-200 bg-white hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+                   style="--theme-color: <?php echo $m['cor']; ?>;">
+                    <div>
+                        <div class="flex justify-between items-start mb-5">
+                            <div class="w-11 h-11 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform duration-300"
+                                 style="background-color: <?php echo $m['bg']; ?>; color: <?php echo $m['cor']; ?>;">
+                                <?php echo $materia_icon; ?>
+                            </div>
+                            <div class="pt-1">
+                                <?php echo $arrow_icon; ?>
+                            </div>
+                        </div>
+                        
+                        <h3 class="text-lg font-bold text-slate-800 mb-2 tracking-tight"><?php echo $m['nome']; ?></h3>
+                        <p class="text-slate-500 text-xs leading-relaxed mb-6">
+                            <?php echo $m['desc']; ?>
+                        </p>
+                    </div>
+                    
+                    <!-- Barra de Progresso/Animação no Hover -->
+                    <div class="h-1 w-full bg-slate-100 rounded-full overflow-hidden shrink-0 mt-auto">
+                        <div class="bar-fill h-full rounded-full" style="background-color: <?php echo $m['cor']; ?>;"></div>
+                    </div>
+                </a>
+            <?php endforeach; ?>
         </div>
+
     </div>
 </div>
 
-
-";
-
-renderizar_pagina("Matérias", $conteudo);
+<?php
+$conteudo = ob_get_clean();
+renderizar_pagina("Módulos de Aprendizado", $conteudo);
 ?>

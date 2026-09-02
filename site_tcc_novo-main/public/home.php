@@ -8,93 +8,108 @@ require_once '../layout.php';
 
 $nome_usuario = $_SESSION['usuario_nome'] ?? 'Estudante';
 
+// Ícones
 $icon_cloud        = render_icon('partly_cloudy_day', 'w-5 h-5 text-cyan-600');
 $icon_stories      = render_icon('auto_stories', 'w-6 h-6 text-cyan-600');
 $icon_forum        = render_icon('forum', 'w-6 h-6 text-purple-600');
 $icon_display      = render_icon('smart_display', 'w-6 h-6 text-emerald-600');
-$icon_arrow_cyan   = render_icon('arrow_forward', 'w-4 h-4 text-cyan-600 inline-block align-middle ml-1');
-$icon_arrow_purple = render_icon('arrow_forward', 'w-4 h-4 text-purple-600 inline-block align-middle ml-1');
-$icon_arrow_emer   = render_icon('arrow_forward', 'w-4 h-4 text-emerald-600 inline-block align-middle ml-1');
+$icon_arrow_cyan   = render_icon('arrow_forward', 'w-4 h-4 text-cyan-600 group-hover:translate-x-1 transition-transform');
+$icon_arrow_purple = render_icon('arrow_forward', 'w-4 h-4 text-purple-600 group-hover:translate-x-1 transition-transform');
+$icon_arrow_emer   = render_icon('arrow_forward', 'w-4 h-4 text-emerald-600 group-hover:translate-x-1 transition-transform');
 
 $conteudo = "
-<div class='p-6 md:p-8 animate-in fade-in duration-700 flex flex-col h-[calc(100vh-120px)] overflow-y-auto scroller-limpo'>
-    <div class='max-w-6xl mx-auto w-full flex flex-col h-full justify-between space-y-4 md:space-y-6'>
+<div class='p-6 md:p-8 animate-in fade-in duration-500 flex flex-col h-[calc(100vh-120px)] overflow-y-auto scroller-limpo'>
+    <div class='max-w-6xl mx-auto w-full flex flex-col h-full justify-between space-y-6'>
         
-        <header class='relative p-8 md:p-10 rounded-3xl overflow-hidden border border-slate-200 shadow-sm bg-white shrink-0'>
-            <div class='absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/5 blur-[100px] rounded-full pointer-events-none'></div>
+        <!-- CABEÇALHO BOAS-VINDAS -->
+        <header class='relative p-8 md:p-10 rounded-3xl border border-slate-200/80 shadow-sm bg-white overflow-hidden shrink-0'>
+            <div class='absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-cyan-500/10 to-transparent blur-3xl pointer-events-none rounded-full'></div>
             
-            <div class='relative z-10'>
-                <div class='flex items-center gap-2 mb-3'>
-                    {$icon_cloud}
-                    <span class='text-xs font-bold text-cyan-700 uppercase tracking-[0.25em]'>Bem-vindo de volta</span>
+            <div class='relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4'>
+                <div>
+                    <div class='flex items-center gap-2 mb-3'>
+                        <span class='px-3 py-1 bg-cyan-50 border border-cyan-100 rounded-full text-[11px] font-bold text-cyan-700 tracking-wider uppercase flex items-center gap-1.5'>
+                            {$icon_cloud} Painel do Aluno
+                        </span>
+                    </div>
+                    <h1 class='text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight'>
+                        Olá, <span class='user-name-display text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-800'>{$nome_usuario}</span>!
+                    </h1>
+                    <p class='text-slate-500 text-sm md:text-base max-w-2xl leading-relaxed mt-2'>
+                        O ecossistema <strong class='text-slate-800 font-semibold'>SENAI VR</strong> está operando em capacidade total. Selecione uma das plataformas abaixo para iniciar suas atividades.
+                    </p>
                 </div>
-                <h1 class='text-3xl md:text-4xl font-bold text-slate-900 mb-2 tracking-tight'>
-                    Olá, <span class='user-name-display'>{$nome_usuario}</span>!
-                </h1>
-                <p class='text-slate-500 text-sm md:text-base max-w-2xl leading-relaxed'>
-                    O sistema <span class='text-slate-900 font-semibold'>SENAI VR</span> está operando em capacidade total. 
-                    Explore seus módulos de treinamento e laboratórios virtuais abaixo.
-                </p>
+
+                <div class='hidden lg:flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-2xl border border-slate-200/60 text-xs text-slate-500 font-medium'>
+                    <span class='w-2 h-2 rounded-full bg-emerald-500 animate-pulse'></span>
+                    Servidor Principal: ATIVO
+                </div>
             </div>
         </header>
 
-        <div class='grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 flex-1 my-2'>
+        <!-- CARDS DE ACESSO RÁPIDO -->
+        <div class='grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 my-2'>
             
             <!-- CARD MANUAL TÉCNICO -->
-            <a href='tutorial.php' class='glass p-6 rounded-2xl border border-slate-200 hover:border-cyan-300 hover:bg-white transition-all duration-300 group flex flex-col justify-between shadow-sm'>
+            <a href='tutorial.php' class='bg-white p-7 rounded-3xl border border-slate-200/80 hover:border-cyan-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between'>
                 <div>
-                    <div class='w-12 h-12 bg-cyan-50 rounded-xl flex items-center justify-center mb-5 group-hover:scale-105 transition-transform duration-300'>
+                    <div class='w-14 h-14 bg-cyan-50 border border-cyan-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-cyan-600 group-hover:text-white transition-colors duration-300 shadow-sm'>
                         {$icon_stories}
                     </div>
-                    <h3 class='text-lg font-bold text-slate-800 mb-2'>Manual Técnico</h3>
-                    <p class='text-slate-500 text-xs md:text-sm leading-relaxed mb-4'>Acesse os protocolos de segurança e setup do Quest 3S.</p>
+                    <h3 class='text-xl font-bold text-slate-900 mb-2 group-hover:text-cyan-700 transition-colors'>Manual Técnico</h3>
+                    <p class='text-slate-500 text-xs md:text-sm leading-relaxed'>Acesse os protocolos de segurança, guias operacionais e setup do Meta Quest 3S.</p>
                 </div>
-                <div class='flex items-center gap-1 text-cyan-600 text-xs font-bold uppercase tracking-wider mt-auto pt-2'>
-                    <span>Acessar</span> {$icon_arrow_cyan}
+                <div class='flex items-center justify-between text-cyan-600 text-xs font-bold uppercase tracking-wider mt-6 pt-4 border-t border-slate-100'>
+                    <span>Acessar Guia</span>
+                    {$icon_arrow_cyan}
                 </div>
             </a>
 
             <!-- CARD CHAT NEURAL -->
-            <a href='dashboard.php' class='glass p-6 rounded-2xl border border-slate-200 hover:border-purple-300 hover:bg-white transition-all duration-300 group flex flex-col justify-between shadow-sm'>
+            <a href='dashboard.php' class='bg-white p-7 rounded-3xl border border-slate-200/80 hover:border-purple-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between'>
                 <div>
-                    <div class='w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-5 group-hover:scale-105 transition-transform duration-300'>
+                    <div class='w-14 h-14 bg-purple-50 border border-purple-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300 shadow-sm'>
                         {$icon_forum}
                     </div>
-                    <h3 class='text-lg font-bold text-slate-800 mb-2'>Chat Neural</h3>
-                    <p class='text-slate-500 text-xs md:text-sm leading-relaxed mb-4'>Interaja com o suporte e tire dúvidas sobre os experimentos.</p>
+                    <h3 class='text-xl font-bold text-slate-900 mb-2 group-hover:text-purple-700 transition-colors'>Chat Neural</h3>
+                    <p class='text-slate-500 text-xs md:text-sm leading-relaxed'>Tire dúvidas com o assistente virtual em tempo real sobre os experimentos teóricos.</p>
                 </div>
-                <div class='flex items-center gap-1 text-purple-600 text-xs font-bold uppercase tracking-wider mt-auto pt-2'>
-                    <span>Conversar</span> {$icon_arrow_purple}
+                <div class='flex items-center justify-between text-purple-600 text-xs font-bold uppercase tracking-wider mt-6 pt-4 border-t border-slate-100'>
+                    <span>Iniciar Chat</span>
+                    {$icon_arrow_purple}
                 </div>
             </a>
 
             <!-- CARD MODO QUIOSQUE -->
-            <a href='quiosque.php' class='glass p-6 rounded-2xl border border-slate-200 hover:border-emerald-300 hover:bg-white transition-all duration-300 group flex flex-col justify-between shadow-sm'>
+            <a href='quiosque.php' class='bg-white p-7 rounded-3xl border border-slate-200/80 hover:border-emerald-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between'>
                 <div>
-                    <div class='w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center mb-5 group-hover:scale-105 transition-transform duration-300'>
+                    <div class='w-14 h-14 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300 shadow-sm'>
                         {$icon_display}
                     </div>
-                    <h3 class='text-lg font-bold text-slate-800 mb-2'>Modo Quiosque</h3>
-                    <p class='text-slate-500 text-xs md:text-sm leading-relaxed mb-4'>Gerencie as aplicações VR em execução e telemetria.</p>
+                    <h3 class='text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-700 transition-colors'>Modo Quiosque</h3>
+                    <p class='text-slate-500 text-xs md:text-sm leading-relaxed'>Gerencie os óculos de realidade virtual conectados, telemetria e execuções de apps.</p>
                 </div>
-                <div class='flex items-center gap-1 text-emerald-600 text-xs font-bold uppercase tracking-wider mt-auto pt-2'>
-                    <span>Monitorar</span> {$icon_arrow_emer}
+                <div class='flex items-center justify-between text-emerald-600 text-xs font-bold uppercase tracking-wider mt-6 pt-4 border-t border-slate-100'>
+                    <span>Painel de Controle</span>
+                    {$icon_arrow_emer}
                 </div>
             </a>
 
         </div>
 
-        <section class='glass px-6 py-4 rounded-xl border border-slate-200 shadow-sm'>
-            <div class='flex items-center justify-between flex-wrap gap-2'>
+        <!-- FOOTER / STATUS BAR -->
+        <section class='bg-white px-6 py-4 rounded-2xl border border-slate-200/80 shadow-sm'>
+            <div class='flex items-center justify-between flex-wrap gap-3'>
                 <div class='flex items-center gap-3'>
-                    <span class='relative flex h-2 w-2'>
-                        <span class='animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75'></span>
-                        <span class='relative inline-flex rounded-full h-2 w-2 bg-green-500'></span>
+                    <span class='relative flex h-2.5 w-2.5'>
+                        <span class='animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75'></span>
+                        <span class='relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500'></span>
                     </span>
-                    <span class='text-xs font-bold text-slate-500 uppercase tracking-wider'>Status Global: Online</span>
+                    <span class='text-xs font-bold text-slate-600 uppercase tracking-wider'>Status dos Serviços</span>
                 </div>
-                <div class='text-slate-400 text-[11px] font-mono tracking-tight'>
-                    LAST_SYNC: " . date('d/m/Y H:i') . "
+                <div class='text-slate-400 text-xs font-mono tracking-tight flex items-center gap-2 bg-slate-50 px-3 py-1 rounded-lg border border-slate-100'>
+                    <span>ÚLTIMA SINCRONIZAÇÃO:</span>
+                    <strong class='text-slate-600'>" . date('d/m/Y H:i') . "</strong>
                 </div>
             </div>
         </section>
@@ -138,11 +153,7 @@ $conteudo = "
         aplicarPrivacidade();
     })();
 </script>
-
-
 ";
 
 renderizar_pagina("Início", $conteudo);
-
-
 ?>
