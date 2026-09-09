@@ -13,28 +13,32 @@ if (file_exists(__DIR__ . '/layout.php')) {
 }
 
 // ==========================================================
-// LISTA DE VÍDEOS (ADICIONE NOVOS VÍDEOS NESTE ARRAY)
+// LISTA DE CONTEÚDOS / VÍDEOS
 // ==========================================================
 $videos_biologia = [
     [
-        'titulo' => 'O que acontece dentro do seu corpo?',
-        'subtitulo' => 'IMERSÃO TOTAL • VR 360° • 09:03',
-        'video_id' => 'XN6GsVRHnhM',
-        'embed_url' => 'https://www.youtube.com/embed/XN6GsVRHnhM',
-        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://youtu.be/XN6GsVRHnhM'
+        'titulo' => 'Tyrannosaurus Rex 3D',
+        'subtitulo' => 'CENA INTERATIVA • MOZAIK 3D',
+        'embed_url' => 'https://us.mozaweb.com/Extra-cenas_3D-Tyrannosaurus_rex_tirano-170423',
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode('https://us.mozaweb.com/Extra-cenas_3D-Tyrannosaurus_rex_tirano-170423')
     ],
     [
-        'titulo' => 'Sistema Circulatório em 3D',
-        'subtitulo' => 'AULA PRÁTICA • VR 360° • 05:45',
-        'video_id' => 'SEU_VIDEO_ID_2',
-        'embed_url' => 'https://www.youtube.com/embed/SEU_VIDEO_ID_2',
-        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://youtu.be/SEU_VIDEO_ID_2'
+        'titulo' => 'Sistema Respiratório Humano 3D',
+        'subtitulo' => 'ANATOMIA HUMANA • MOZAIK 3D',
+        'embed_url' => 'https://us.mozaweb.com/pt/Extra-Cenas_3D-em_Sistema_em_em_respi_em_ratorio-12049?mode=directlink',
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode('https://us.mozaweb.com/pt/Extra-Cenas_3D-em_Sistema_em_em_respi_em_ratorio-12049?mode=directlink')
+    ],
+    [
+        'titulo' => 'O que acontece dentro do seu corpo?',
+        'subtitulo' => 'IMERSÃO TOTAL • VR 360° • 09:03',
+        'embed_url' => 'https://www.youtube.com/embed/XN6GsVRHnhM',
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://youtu.be/XN6GsVRHnhM'
     ]
 ];
 
 // Configurações Globais da Página
 $titulo_pagina = "Biologia Imersiva";
-$subtitulo_pagina = "Anatomia Humana, Biologia Celular e Ecossistemas";
+$subtitulo_pagina = "ANATOMIA HUMANA, BIOLOGIA CELULAR E ECOSSISTEMAS";
 $icone_materia = "microscope";
 
 // Ícones via render_icon ou Fallback
@@ -69,14 +73,14 @@ ob_start();
             <div class="bg-white rounded-3xl shadow-sm border border-emerald-100 overflow-hidden hover:shadow-md transition-all">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 items-center">
                     
-                    <!-- Coluna do Vídeo (8 colunas no desktop) -->
+                    <!-- Coluna do Vídeo / Iframe (8 colunas no desktop) -->
                     <div class="lg:col-span-8">
                         <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-inner">
                             <iframe 
                                 class="w-full h-full border-0" 
                                 src="<?php echo $video['embed_url']; ?>" 
                                 title="<?php echo $video['titulo']; ?>"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; xr-spatial-tracking; webxr; fullscreen" 
                                 allowfullscreen>
                             </iframe>
                         </div>
