@@ -45,16 +45,13 @@ $nome_usuario = $_SESSION['usuario_nome'] ?? $_SESSION['usuario_logado'] ?? 'Tes
 
 $icon_antenna     = function_exists('render_icon') ? render_icon('settings_input_antenna', 'w-4 h-4 text-cyan-600 inline-block align-middle') : '';
 $icon_security    = function_exists('render_icon') ? render_icon('security', 'w-5 h-5 text-slate-500') : '';
-$icon_lock_open   = function_exists('render_icon') ? render_icon('lock_open', 'w-8 h-8 text-cyan-600 transition-transform') : '';
-$icon_lock_closed = function_exists('render_icon') ? render_icon('lock', 'w-8 h-8 text-red-600 transition-transform') : '';
-$icon_privacy     = function_exists('render_icon') ? render_icon('visibility_off', 'w-8 h-8 text-purple-600 group-hover:scale-105 transition-transform id="svg-privacy"') : '';
 
 $svg_wifi_on = '<svg class="w-8 h-8 text-emerald-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.14 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path></svg>';
 $svg_wifi_off = '<svg class="w-8 h-8 text-orange-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18M12 20h.01m-4.242-3.596a5.5 5.5 0 015.656-.828m3.987 1.838a5.498 5.498 0 00-1.127-1.01M4.929 12.929a10 10 0 0113.142-1.2m2.071 2.071a9.96 9.96 0 001.216-1.78M1.394 9.393a15 15 0 0119.544-1.353"></path></svg>';
 
 $conteudo = <<<HTML
-<div class="p-6 md:p-8 animate-in fade-in duration-500 bg-transparent flex flex-col h-[calc(100vh-120px)] overflow-y-auto scroller-limpo">
-    <div class="max-w-5xl mx-auto w-full flex flex-col flex-1">
+<div id="kiosk-app-wrapper" class="p-6 md:p-8 animate-in fade-in duration-500 bg-transparent flex flex-col w-full">
+    <div class="max-w-5xl mx-auto w-full space-y-6">
         
         <!-- HEADER NO TOPO -->
         <header class="flex justify-between items-center flex-wrap gap-4 shrink-0">
@@ -65,7 +62,7 @@ $conteudo = <<<HTML
                 </div>
                 <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Modo Quiosque</h1>
                 <p class="text-slate-500 text-xs mt-0.5">
-                    <br> Usuário Conectado: <span class="font-bold text-slate-700 user-name-display">{$nome_usuario}</span>
+                    Usuário Conectado: <span class="font-bold text-slate-700 user-name-display">{$nome_usuario}</span>
                 </p>
             </div>
             
@@ -78,29 +75,58 @@ $conteudo = <<<HTML
             </div>
         </header>
 
-        <!-- QUADRADO COM OS 3 BOTÕES -->
-        <section class="glass p-8 rounded-2xl border border-slate-200 bg-white shadow-sm mt-24">
+        <!-- DASHBOARD METRICS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Modo de Operação</span>
+                <span class="text-sm font-bold text-slate-700 mt-1" id="info-kiosk-mode">Padrão / Desbloqueado</span>
+            </div>
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Conectividade local</span>
+                <span class="text-sm font-bold text-emerald-600 mt-1" id="info-net-status">Interface Ativa</span>
+            </div>
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Endereço IP Host</span>
+                <span class="text-sm font-bold text-slate-700 mt-1">127.0.0.1</span>
+            </div>
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Tempo de Sessão</span>
+                <span class="text-sm font-bold text-slate-700 mt-1" id="session-timer">00:00:00</span>
+            </div>
+        </div>
+
+        <!-- CONTROLES CRÍTICOS -->
+        <section class="glass p-6 md:p-8 rounded-2xl border border-slate-200 bg-white shadow-sm">
             <h2 class="text-base font-bold mb-6 flex items-center gap-2 text-slate-800">
                 {$icon_security}
                 Controles Críticos
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 
-                <button id="btn-travar" onclick="abrirModalSenha()" class="p-8 bg-white rounded-xl flex flex-col items-center justify-center gap-4 border border-slate-200 hover:bg-slate-50 transition-all group focus:outline-none">
+                <!-- BOTÃO TRAVAR MENU -->
+                <button id="btn-travar" onclick="abrirModalSenha()" class="p-8 bg-white rounded-xl flex flex-col items-center justify-center gap-4 border border-slate-200 hover:bg-slate-50 transition-all group focus:outline-none shadow-sm">
                     <div id="lock-icon-container" class="w-14 h-14 rounded-lg flex items-center justify-center bg-cyan-50 transition-colors">
-                        {$icon_lock_open}
+                        <svg class="w-8 h-8 text-cyan-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="5" y="11" width="14" height="10" rx="2" stroke-width="2"/>
+                            <path d="M8 11V7a4 4 0 0 1 7.5-2" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
                     </div>
                     <span id="lock-text" class="text-xs font-bold uppercase tracking-wider text-slate-600 text-center">Travar Menu</span>
                 </button>
 
-                <button id="btn-privacidade" onclick="togglePrivacy()" class="p-8 bg-white rounded-xl flex flex-col items-center justify-center gap-4 border border-slate-200 hover:bg-slate-50 transition-all group focus:outline-none">
+                <!-- BOTÃO PRIVACIDADE -->
+                <button id="btn-privacidade" onclick="togglePrivacy()" class="p-8 bg-white rounded-xl flex flex-col items-center justify-center gap-4 border border-slate-200 hover:bg-slate-50 transition-all group focus:outline-none shadow-sm">
                     <div class="w-14 h-14 rounded-lg flex items-center justify-center bg-purple-50">
-                        {$icon_privacy}
+                        <svg class="w-8 h-8 text-purple-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
                     </div>
                     <span id="privacy-text" class="text-xs font-bold uppercase tracking-wider text-slate-600 text-center">Privacidade</span>
                 </button>
 
-                <button id="btn-offline" onclick="toggleOffline()" class="p-8 bg-white rounded-xl flex flex-col items-center justify-center gap-4 border border-slate-200 hover:bg-slate-50 transition-all group focus:outline-none">
+                <!-- BOTÃO ONLINE / OFFLINE -->
+                <button id="btn-offline" onclick="toggleOffline()" class="p-8 bg-white rounded-xl flex flex-col items-center justify-center gap-4 border border-slate-200 hover:bg-slate-50 transition-all group focus:outline-none shadow-sm">
                     <div id="wifi-icon-container" class="w-14 h-14 rounded-lg flex items-center justify-center bg-emerald-50 transition-colors">
                         {$svg_wifi_on}
                     </div>
@@ -110,6 +136,27 @@ $conteudo = <<<HTML
             </div>
         </section>
 
+        <!-- AÇÕES DE MANUTENÇÃO & AUDITORIA -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm md:col-span-1 space-y-3">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Utilitários do Quiosque</h3>
+                <button type="button" onclick="recarregarAplicacaoPreservandoQuiosque()" class="w-full py-2.5 px-4 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs rounded-xl border border-slate-200 flex items-center justify-between transition-colors">
+                    <span>Recarregar Aplicação</span>
+                    <span class="text-slate-400">↺</span>
+                </button>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm md:col-span-2">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Histórico de Eventos Recentes</h3>
+                <ul id="kiosk-logs" class="space-y-2 text-xs text-slate-600">
+                    <li class="p-2 bg-slate-50 rounded-lg border border-slate-100 flex justify-between">
+                        <span>Sessão de administração inicializada</span>
+                        <span class="text-slate-400 font-mono" id="log-time-init">--:--</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -117,14 +164,17 @@ $conteudo = <<<HTML
 <div id="modal-senha" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl p-6 w-full max-w-xs text-center space-y-4 animate-in zoom-in-95 duration-200">
         <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl mx-auto flex items-center justify-center" id="icon-modal-container">
-            {$icon_lock_closed}
+            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <rect x="5" y="11" width="14" height="10" rx="2" stroke-width="2"/>
+                <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke-width="2" stroke-linecap="round"/>
+            </svg>
         </div>
         <div>
             <h3 class="text-base font-bold text-slate-800" id="titulo-modal">Segurança</h3>
             <p class="text-slate-500 text-xs mt-1" id="subtitulo-modal">Digite a senha para prosseguir</p>
         </div>
         <div>
-            <input type="password" id="input-senha-destrava" placeholder="Senha" autocomplete="off" class="w-full text-center px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-sm font-bold tracking-widest text-slate-800">
+            <input type="password" id="input-senha-destrava" onkeydown="tratarTeclaInput(event)" placeholder="Senha" autocomplete="off" class="w-full text-center px-4 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-600 focus:outline-none text-sm font-bold tracking-widest text-slate-800">
             <p id="erro-senha" class="text-xs text-red-500 font-bold mt-1.5 hidden">Senha incorreta!</p>
         </div>
         <div class="flex gap-2">
@@ -135,21 +185,9 @@ $conteudo = <<<HTML
 </div>
 
 <style>
-    html, body {
-        overflow: hidden !important;
-        height: 100% !important;
-    }
-    .scroller-limpo::-webkit-scrollbar {
-        display: none;
-    }
-    .scroller-limpo {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-    /* Estilo visual para desativar os botões de saída quando travado */
     .btn-sair-desativado {
         opacity: 0.4 !important;
-        cursor: not-allowed !allowed !important;
+        cursor: not-allowed !important;
         pointer-events: none !important;
     }
 </style>
@@ -159,12 +197,54 @@ $conteudo = <<<HTML
     const NOME_REAL_USUARIO = "{$nome_usuario}";
     const NOME_ANONIMO = '********';
 
-    const ICON_LOCK_OPEN = `{$icon_lock_open}`;
-    const ICON_LOCK_CLOSED = `{$icon_lock_closed}`;
+    const ICON_LOCK_OPEN = `<svg class="w-8 h-8 text-cyan-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="11" width="14" height="10" rx="2" stroke-width="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2" stroke-width="2" stroke-linecap="round"/></svg>`;
+    const ICON_LOCK_CLOSED = `<svg class="w-8 h-8 text-red-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="11" width="14" height="10" rx="2" stroke-width="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4" stroke-width="2" stroke-linecap="round"/></svg>`;
     const SVG_WIFI_ON = `{$svg_wifi_on}`;
     const SVG_WIFI_OFF = `{$svg_wifi_off}`;
 
     let isOffline = false;
+
+    function recarregarAplicacaoPreservandoQuiosque() {
+        const wrapper = document.getElementById('kiosk-app-wrapper');
+        if(!wrapper) return;
+
+        wrapper.style.opacity = '0.5';
+
+        fetch(window.location.href, { cache: 'no-store' })
+            .then(res => res.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const novoConteudo = doc.getElementById('kiosk-app-wrapper');
+
+                if (novoConteudo) {
+                    wrapper.innerHTML = novoConteudo.innerHTML;
+                }
+                
+                const travado = estaMenuTravado();
+                const privacidade = localStorage.getItem('senai_privacidade_ativa') === 'true';
+                
+                aplicarPrivacidadeUI(privacidade);
+                atualizarInterfaceLock(travado);
+
+                addLog('Aplicação recarregada com sucesso');
+                wrapper.style.opacity = '1';
+            })
+            .catch(err => {
+                console.error('Erro ao recarregar via AJAX:', err);
+                wrapper.style.opacity = '1';
+            });
+    }
+
+    function addLog(mensagem) {
+        const logs = document.getElementById('kiosk-logs');
+        if(!logs) return;
+        const now = new Date().toLocaleTimeString();
+        const li = document.createElement('li');
+        li.className = 'p-2 bg-slate-50 rounded-lg border border-slate-100 flex justify-between animate-in fade-in duration-300';
+        li.innerHTML = `<span>\${mensagem}</span><span class="text-slate-400 font-mono">\${now}</span>`;
+        logs.prepend(li);
+    }
 
     function estaMenuTravado() {
         return localStorage.getItem('senai_menu_travado') === 'true';
@@ -218,6 +298,14 @@ $conteudo = <<<HTML
         document.getElementById('modal-senha').classList.add('hidden');
     }
 
+    function tratarTeclaInput(event) {
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            event.preventDefault();
+            event.stopPropagation();
+            validarSenhaAcao();
+        }
+    }
+
     function validarSenhaAcao() {
         const input = document.getElementById('input-senha-destrava');
         const erro = document.getElementById('erro-senha');
@@ -234,15 +322,17 @@ $conteudo = <<<HTML
                 }
 
                 atualizarInterfaceLock(false);
+                addLog('Menu destravado via autenticação');
             } else {
                 localStorage.setItem('senai_menu_travado', 'true');
                 entraTelaCheia();
 
                 if (navigator.keyboard && navigator.keyboard.lock) {
-                    navigator.keyboard.lock(['F11', 'Escape', 'AltLeft', 'Tab', 'MetaLeft']).catch(() => {});
+                    navigator.keyboard.lock(['F12', 'F11', 'Escape', 'AltLeft', 'Tab', 'MetaLeft', 'KeyI', 'KeyJ', 'KeyU', 'KeyC']).catch(() => {});
                 }
 
                 atualizarInterfaceLock(true);
+                addLog('Modo Quiosque travado');
             }
         } else {
             erro.classList.remove('hidden');
@@ -259,8 +349,8 @@ $conteudo = <<<HTML
         const label = document.getElementById('lock-text');
         const btn = document.getElementById('btn-travar');
         const iconContainer = document.getElementById('lock-icon-container');
+        const infoKioskMode = document.getElementById('info-kiosk-mode');
 
-        // BLOQUEIO/DESBLOQUEIO VISUAL DE BOTÕES DE SAIR/LOGOUT
         const elementosSair = document.querySelectorAll('a[href*="logout"], a[href*="sair"], button[onclick*="logout"], .btn-logout, #btn-sair');
         elementosSair.forEach(el => {
             if (travado) {
@@ -282,6 +372,7 @@ $conteudo = <<<HTML
             
             label.innerText = 'Menu Travado';
             btn.classList.add('bg-red-50', 'border-red-300');
+            if(infoKioskMode) infoKioskMode.innerText = "Restrito / Bloqueado";
             
             if (iconContainer) {
                 iconContainer.className = 'w-14 h-14 rounded-lg flex items-center justify-center bg-red-100 transition-colors';
@@ -295,6 +386,7 @@ $conteudo = <<<HTML
             
             label.innerText = 'Travar Menu';
             btn.classList.remove('bg-red-50', 'border-red-300');
+            if(infoKioskMode) infoKioskMode.innerText = "Padrão / Desbloqueado";
             
             if (iconContainer) {
                 iconContainer.className = 'w-14 h-14 rounded-lg flex items-center justify-center bg-cyan-50 transition-colors';
@@ -302,71 +394,6 @@ $conteudo = <<<HTML
             }
         }
     }
-
-    // INTERCEPTADOR DE CLIQUE GLOBAL PARA BLOQUEAR AÇÕES DE SAÍDA E LOGOUT
-    document.addEventListener('click', function(e) {
-        if (!estaMenuTravado()) return;
-
-        // Procura se o elemento clicado (ou seus pais) é um botão/link de saída
-        const alvo = e.target.closest('a[href*="logout"], a[href*="sair"], button[onclick*="logout"], .btn-logout, #btn-sair');
-        
-        if (alvo) {
-            e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation();
-            return false;
-        }
-
-        // Mantém a tela cheia ativa em qualquer outro clique
-        if (!document.fullscreenElement) {
-            entraTelaCheia();
-        }
-    }, true);
-
-    document.addEventListener('keydown', function(e) {
-        const modal = document.getElementById('modal-senha');
-        
-        if (modal && !modal.classList.contains('hidden') && (e.key === 'Enter' || e.keyCode === 13)) {
-            e.preventDefault();
-            validarSenhaAcao();
-            return false;
-        }
-
-        if (e.key === 'F11' || e.keyCode === 122) {
-            e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation();
-            
-            if (estaMenuTravado()) {
-                entraTelaCheia();
-            }
-            return false;
-        }
-
-        if (estaMenuTravado()) {
-            if (
-                e.key === 'Escape' || 
-                (e.ctrlKey && (e.key === 't' || e.key === 'n' || e.key === 'w' || e.key === 'r'))
-            ) {
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation();
-                return false;
-            }
-        }
-    }, true);
-
-    const reengajarFullscreen = () => {
-        if (estaMenuTravado() && (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement)) {
-            setTimeout(entraTelaCheia, 50);
-        }
-    };
-
-    document.addEventListener('fullscreenchange', reengajarFullscreen);
-    document.addEventListener('webkitfullscreenchange', reengajarFullscreen);
-    document.addEventListener('mozfullscreenchange', reengajarFullscreen);
-    document.addEventListener('MSFullscreenChange', reengajarFullscreen);
-    window.addEventListener('resize', reengajarFullscreen);
 
     function aplicarPrivacidadeUI(ativo) {
         const btn = document.getElementById('btn-privacidade');
@@ -377,18 +404,6 @@ $conteudo = <<<HTML
                 el.dataset.nomeOriginal = el.innerText;
             }
             el.innerText = ativo ? NOME_ANONIMO : (el.dataset.nomeOriginal || NOME_REAL_USUARIO);
-        });
-
-        const primeiroNome = NOME_REAL_USUARIO.split(' ')[0];
-        document.querySelectorAll('aside span, aside div, aside p, .sidebar span, .sidebar div, .sidebar p').forEach(el => {
-            if (el.children.length === 0) {
-                if (el.innerText.includes(primeiroNome) || el.innerText === NOME_ANONIMO) {
-                    if (!el.dataset.nomeOriginal) {
-                        el.dataset.nomeOriginal = el.innerText;
-                    }
-                    el.innerText = ativo ? NOME_ANONIMO : el.dataset.nomeOriginal;
-                }
-            }
         });
 
         if (!btn) return;
@@ -408,6 +423,7 @@ $conteudo = <<<HTML
         localStorage.setItem('senai_privacidade_ativa', novoEstado ? 'true' : 'false');
         window.dispatchEvent(new Event('storage'));
         aplicarPrivacidadeUI(novoEstado);
+        addLog(novoEstado ? 'Modo de privacidade ativado' : 'Modo de privacidade desativado');
     }
 
     function toggleOffline() {
@@ -415,57 +431,185 @@ $conteudo = <<<HTML
         const btn = document.getElementById('btn-offline');
         const text = document.getElementById('wifi-text');
         const iconContainer = document.getElementById('wifi-icon-container');
+        const infoNetStatus = document.getElementById('info-net-status');
 
         const novoStatus = isOffline ? 'offline' : 'online';
 
         fetch(window.location.href, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
-                'action': 'toggle_internet',
-                'status': novoStatus
-            })
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ 'action': 'toggle_internet', 'status': novoStatus })
         }).then(response => response.json())
-          .then(data => {
-              console.log('Comando de rede enviado:', data);
-          }).catch(err => console.error('Erro ao alterar conectividade:', err));
+          .then(data => console.log('Comando enviado:', data))
+          .catch(err => console.error('Erro:', err));
 
         if (isOffline) {
             btn.classList.add('bg-orange-50', 'border-orange-300');
             text.innerText = 'OFF-LINE';
             text.className = 'text-xs font-bold uppercase tracking-wider text-orange-600 text-center';
+            if(infoNetStatus) { infoNetStatus.innerText = "Desativado"; infoNetStatus.className = "text-sm font-bold text-orange-600 mt-1"; }
             
             if (iconContainer) {
                 iconContainer.className = 'w-14 h-14 rounded-lg flex items-center justify-center bg-orange-100 transition-colors';
                 iconContainer.innerHTML = SVG_WIFI_OFF;
             }
+            addLog('Alternado para estado Off-line');
         } else {
             btn.classList.remove('bg-orange-50', 'border-orange-300');
             text.innerText = 'ONLINE';
             text.className = 'text-xs font-bold uppercase tracking-wider text-emerald-600 text-center';
+            if(infoNetStatus) { infoNetStatus.innerText = "Interface Ativa"; infoNetStatus.className = "text-sm font-bold text-emerald-600 mt-1"; }
             
             if (iconContainer) {
                 iconContainer.className = 'w-14 h-14 rounded-lg flex items-center justify-center bg-emerald-50 transition-colors';
                 iconContainer.innerHTML = SVG_WIFI_ON;
             }
+            addLog('Alternado para estado On-line');
         }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const ativo = localStorage.getItem('senai_privacidade_ativa') === 'true';
-        aplicarPrivacidadeUI(ativo);
-        atualizarInterfaceLock(estaMenuTravado());
-    });
+    let totalSeconds = 0;
+    setInterval(() => {
+        totalSeconds++;
+        const hrs = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+        const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+        const secs = String(totalSeconds % 60).padStart(2, '0');
+        const timerEl = document.getElementById('session-timer');
+        if(timerEl) timerEl.innerText = `\${hrs}:\${mins}:\${secs}`;
+    }, 1000);
 
-    window.addEventListener('storage', () => {
+    document.addEventListener('DOMContentLoaded', () => {
+        const travado = estaMenuTravado();
         const ativo = localStorage.getItem('senai_privacidade_ativa') === 'true';
         aplicarPrivacidadeUI(ativo);
-        atualizarInterfaceLock(estaMenuTravado());
+        atualizarInterfaceLock(travado);
+        
+        if (travado) {
+            entraTelaCheia();
+        }
+        
+        const initLogTime = document.getElementById('log-time-init');
+        if(initLogTime) initLogTime.innerText = new Date().toLocaleTimeString();
     });
 </script>
 HTML;
+
+/**
+ * NAVEGAÇÃO SPA + TROCA DINÂMICA DA SIDEBAR E CONTEÚDO PRINCIPAL
+ */
+$script_persistencia_global = <<<JS
+<script>
+    (function() {
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('a[href]');
+            
+            if (localStorage.getItem('senai_menu_travado') === 'true') {
+                if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                    let elem = document.documentElement;
+                    if (elem.requestFullscreen) { elem.requestFullscreen().catch(() => {}); }
+                    else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); }
+                }
+
+                const logoutBtn = e.target.closest('a[href*="logout"], a[href*="sair"], button[onclick*="logout"], .btn-logout, #btn-sair');
+                if (logoutBtn) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+
+                if (link && link.href && !link.href.includes('#') && !link.href.includes('javascript:') && !link.href.includes('logout')) {
+                    const urlDestino = link.href;
+                    if (urlDestino.startsWith(window.location.origin)) {
+                        e.preventDefault();
+                        fetch(urlDestino)
+                            .then(res => res.text())
+                            .then(html => {
+                                const parser = new DOMParser();
+                                const doc = parser.parseFromString(html, 'text/html');
+
+                                // 1. ATUALIZA O CONTEÚDO PRINCIPAL
+                                const novoConteudo = doc.querySelector('main') || doc.body;
+                                const mainAtual = document.querySelector('main') || document.body;
+                                if (novoConteudo && mainAtual) {
+                                    mainAtual.innerHTML = novoConteudo.innerHTML;
+                                }
+
+                                // 2. SUBTITUI A BARRA LATERAL (SIDEBAR) INTEIRA
+                                const novaSidebar = doc.getElementById('sidebar') || doc.querySelector('aside');
+                                const sidebarAtual = document.getElementById('sidebar') || document.querySelector('aside');
+                                if (novaSidebar && sidebarAtual) {
+                                    sidebarAtual.innerHTML = novaSidebar.innerHTML;
+                                }
+
+                                window.history.pushState({}, '', urlDestino);
+
+                                // 3. RE-EXECUTA OS SCRIPTS DA NOVA PÁGINA
+                                if (novoConteudo) {
+                                    novoConteudo.querySelectorAll('script').forEach(oldScript => {
+                                        const newScript = document.createElement('script');
+                                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                                        newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                                        document.body.appendChild(newScript);
+                                    });
+                                }
+                            })
+                            .catch(() => { window.location.href = urlDestino; });
+                    }
+                }
+            }
+        }, true);
+
+        document.addEventListener('contextmenu', function(e) {
+            if (localStorage.getItem('senai_menu_travado') === 'true') {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }
+        }, true);
+
+        function travarTeclas(e) {
+            const modalOpen = !document.getElementById('modal-senha').classList.contains('hidden');
+            if (modalOpen && (e.key === 'Enter' || e.keyCode === 13)) {
+                return true; 
+            }
+
+            if (localStorage.getItem('senai_menu_travado') === 'true') {
+                const k = e.key || e.keyCode;
+                const isF12 = k === 'F12' || e.keyCode === 123;
+                const isF11 = k === 'F11' || e.keyCode === 122;
+                const isF5 = k === 'F5' || e.keyCode === 116;
+                const isEsc = k === 'Escape' || e.keyCode === 27;
+                
+                if (isF5) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (typeof recarregarAplicacaoPreservandoQuiosque === 'function') {
+                        recarregarAplicacaoPreservandoQuiosque();
+                    }
+                    return false;
+                }
+
+                const isDevTools = (e.ctrlKey || e.metaKey) && (
+                    (e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+                    (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S' || e.key === 'r' || e.key === 'R')
+                );
+
+                if (isF12 || isF11 || isEsc || isDevTools) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    return false;
+                }
+            }
+        }
+
+        window.addEventListener('keydown', travarTeclas, true);
+        window.addEventListener('keyup', travarTeclas, true);
+    })();
+</script>
+JS;
+
+$conteudo .= $script_persistencia_global;
 
 if (function_exists('renderizar_pagina')) {
     renderizar_pagina("Modo Quiosque", $conteudo);

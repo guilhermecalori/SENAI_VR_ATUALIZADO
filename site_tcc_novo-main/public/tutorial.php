@@ -4,15 +4,12 @@ if (!isset($_SESSION['usuario_logado'])) {
     header("Location: ../login.php");
     exit();
 }
-require_once '../layout.php';
+if (file_exists('../layout.php')) {
+    require_once '../layout.php';
+}
 
 $extra_css = "
 <style>
-    html, body {
-        overflow: hidden !important;
-        height: 100% !important;
-    }
-
     .glass-panel { 
         background: rgba(255, 255, 255, 0.7); 
         backdrop-filter: blur(20px); 
@@ -20,12 +17,11 @@ $extra_css = "
         box-shadow: 0 10px 30px rgba(0,0,0,0.04);
     }
     
-    .sidebar-manual { height: calc(100vh - 220px); overflow-y: auto; }
-    .sidebar-manual::-webkit-scrollbar { width: 4px; }
-    .sidebar-manual::-webkit-scrollbar-thumb { background: rgba(8, 145, 178, 0.3); border-radius: 10px; }
+    .sidebar-manual-list::-webkit-scrollbar { width: 4px; }
+    .sidebar-manual-list::-webkit-scrollbar-thumb { background: rgba(8, 145, 178, 0.3); border-radius: 10px; }
     
-    .nav-manual-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(0,0,0,0.06); margin-bottom: 0.6rem; text-align: left; padding: 1rem; width: 100%; border-radius: 1rem; font-size: 0.85rem; color: #64748b; background: white; }
-    .nav-manual-btn:hover { background: rgba(8, 145, 178, 0.05); transform: translateX(8px); border-color: rgba(8, 145, 178, 0.3); color: #0f172a; }
+    .nav-manual-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(0,0,0,0.06); margin-bottom: 0.5rem; text-align: left; padding: 0.85rem 1rem; width: 100%; border-radius: 1rem; font-size: 0.85rem; color: #64748b; background: white; }
+    .nav-manual-btn:hover { background: rgba(8, 145, 178, 0.05); transform: translateX(6px); border-color: rgba(8, 145, 178, 0.3); color: #0f172a; }
     .nav-manual-btn.active { background-color: rgba(8, 145, 178, 0.1); border-color: #0891b2; color: #0891b2; font-weight: 700; }
     
     .content-section { display: none; }
@@ -56,29 +52,13 @@ $extra_css = "
     }
     .status-dot-manual { width: 6px; height: 6px; background: #059669; border-radius: 50%; margin-right: 8px; animation: pulse-manual 2s infinite; }
     @keyframes pulse-manual { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-
-    .btn-demo {
-        margin-top: 1rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1.5rem;
-        background: rgba(8, 145, 178, 0.08);
-        color: #0891b2;
-        border: 1px solid rgba(8, 145, 178, 0.3);
-        border-radius: 0.75rem;
-        font-weight: bold;
-        font-size: 0.875rem;
-        transition: all 0.2s;
-    }
-    .btn-demo:hover { background: rgba(8, 145, 178, 0.15); transform: translateY(-2px); }
 </style>
 ";
 
 $conteudo = $extra_css . "
-<div class='p-6 md:p-8 h-[calc(100vh-120px)] overflow-hidden flex flex-col'>
+<div class='p-6 md:p-8 h-[calc(100vh-80px)] flex flex-col w-full overflow-hidden'>
     
-    <header class='flex justify-between items-end mb-6 shrink-0'>
+    <header class='flex justify-between items-end mb-4 shrink-0'>
         <div>
             <div class='status-badge-manual mb-2'>
                 <span class='status-dot-manual'></span> SISTEMA OPERACIONAL ATIVO
@@ -88,23 +68,28 @@ $conteudo = $extra_css . "
         </div>
     </header>
 
-    <div class='flex gap-8 flex-1 overflow-hidden mb-4 min-h-0'>
-        <aside class='w-1/4 sidebar-manual px-2 space-y-2 shrink-0'>
-            <button onclick='selectTopic(this, \"s1\")' class='nav-manual-btn active'>01. Setup Inicial & QR</button>
-            <button onclick='selectTopic(this, \"s2\")' class='nav-manual-btn'>02. Ajuste de Lentes (IPD)</button>
-            <button onclick='selectTopic(this, \"s3\")' class='nav-manual-btn'>03. Espaçador de Óculos</button>
-            <button onclick='selectTopic(this, \"s4\")' class='nav-manual-btn'>04. Tampa da Bateria</button>
-            <button onclick='selectTopic(this, \"s5\")' class='nav-manual-btn text-red-500'>05. Cuidado Crítico (Sol)</button>
-            <button onclick='selectTopic(this, \"s6\")' class='nav-manual-btn'>06. Rastreamento</button>
-            <button onclick='selectTopic(this, \"s7\")' class='nav-manual-btn'>07. Ajuste de Faixa (Strap)</button>
-            <button onclick='selectTopic(this, \"s8\")' class='nav-manual-btn'>08. Anatomia do Headset</button>
-            <button onclick='selectTopic(this, \"s9\")' class='nav-manual-btn'>09. Anatomia dos Controles</button>
-            <div class='pt-4'>
-                <button onclick='showAllManual(this)' class='nav-manual-btn border-cyan-300 text-center font-bold text-cyan-700 hover:bg-cyan-50'>VISUALIZAR TUDO</button>
+    <div class='flex gap-6 flex-1 overflow-hidden min-h-0'>
+        <!-- BARRA LATERAL COM BOTÃO VISUALIZAR TUDO FIXO NO RODAPÉ -->
+        <aside class='w-1/4 flex flex-col shrink-0 h-full overflow-hidden'>
+            <div class='sidebar-manual-list flex-1 overflow-y-auto pr-2 space-y-1'>
+                <button onclick='selectTopic(this, \"s1\")' class='nav-manual-btn active'>01. Setup Inicial & QR</button>
+                <button onclick='selectTopic(this, \"s2\")' class='nav-manual-btn'>02. Ajuste de Lentes (IPD)</button>
+                <button onclick='selectTopic(this, \"s3\")' class='nav-manual-btn'>03. Espaçador de Óculos</button>
+                <button onclick='selectTopic(this, \"s4\")' class='nav-manual-btn'>04. Tampa da Bateria</button>
+                <button onclick='selectTopic(this, \"s5\")' class='nav-manual-btn text-red-500'>05. Cuidado Crítico (Sol)</button>
+                <button onclick='selectTopic(this, \"s6\")' class='nav-manual-btn'>06. Rastreamento</button>
+                <button onclick='selectTopic(this, \"s7\")' class='nav-manual-btn'>07. Ajuste de Faixa (Strap)</button>
+                <button onclick='selectTopic(this, \"s8\")' class='nav-manual-btn'>08. Anatomia do Headset</button>
+                <button onclick='selectTopic(this, \"s9\")' class='nav-manual-btn'>09. Anatomia dos Controles</button>
+            </div>
+            
+            <div class='pt-3 pr-2 shrink-0 bg-transparent'>
+                <button onclick='showAllManual(this)' class='nav-manual-btn border-cyan-400 text-center font-bold text-cyan-700 hover:bg-cyan-50 shadow-sm'>VISUALIZAR TUDO</button>
             </div>
         </aside>
 
-        <main id='manual-content-area' class='w-3/4 glass-panel p-8 md:p-12 rounded-[2.5rem] overflow-y-auto custom-scrollbar'>
+        <!-- ÁREA PRINCIPAL DE CONTEÚDO -->
+        <main id='manual-content-area' class='w-3/4 glass-panel p-8 md:p-12 rounded-[2.5rem] overflow-y-auto custom-scrollbar h-full'>
             
             <div id='s1' class='content-section active space-y-8'>
                 <div class='flex items-center gap-4 text-cyan-600 font-bold tracking-widest text-xs uppercase'>
@@ -287,9 +272,11 @@ $conteudo = $extra_css . "
         document.getElementById('manual-content-area').scrollTop = 0;
     }
 </script>
-
-
 ";
 
-renderizar_pagina("Manual Técnico", $conteudo);
+if (function_exists('renderizar_pagina')) {
+    renderizar_pagina("Manual Técnico", $conteudo);
+} else {
+    echo $conteudo;
+}
 ?>

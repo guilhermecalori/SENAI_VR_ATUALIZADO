@@ -8,8 +8,13 @@ require_once '../layout.php';
 
 $nome_usuario = $_SESSION['usuario_nome'] ?? 'Estudante';
 
+// Lógica de perfil (Aluno / Professor)
+$tipo_usuario = strtolower($_GET['tipo'] ?? $_SESSION['usuario_tipo'] ?? 'aluno');
+$is_professor = ($tipo_usuario === 'professor' || $tipo_usuario === 'docente');
+$rotulo_painel = $is_professor ? 'Painel do Professor' : 'Painel do Aluno';
+
 // Ícones
-$icon_cloud        = render_icon('partly_cloudy_day', 'w-5 h-5 text-cyan-600');
+$icon_badge        = render_icon($is_professor ? 'badge' : 'school', 'w-4 h-4 text-cyan-600');
 $icon_stories      = render_icon('auto_stories', 'w-6 h-6 text-cyan-600');
 $icon_forum        = render_icon('forum', 'w-6 h-6 text-purple-600');
 $icon_display      = render_icon('smart_display', 'w-6 h-6 text-emerald-600');
@@ -28,12 +33,12 @@ $conteudo = "
             <div class='relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4'>
                 <div>
                     <div class='flex items-center gap-2 mb-3'>
-                        <span class='px-3 py-1 bg-cyan-50 border border-cyan-100 rounded-full text-[11px] font-bold text-cyan-700 tracking-wider uppercase flex items-center gap-1.5'>
-                            {$icon_cloud} Painel do Aluno
+                        <span class='px-3 py-1.5 bg-cyan-50 border border-cyan-100 rounded-full text-[11px] font-bold text-cyan-700 tracking-wider uppercase flex items-center gap-2 shadow-xs'>
+                            {$icon_badge} {$rotulo_painel}
                         </span>
                     </div>
                     <h1 class='text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight'>
-                        Olá, <span class='user-name-display text-transparent bg-clip-text bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-800'>{$nome_usuario}</span>!
+                        Olá, <span class='user-name-display text-slate-900 font-extrabold'>{$nome_usuario}</span>!
                     </h1>
                     <p class='text-slate-500 text-sm md:text-base max-w-2xl leading-relaxed mt-2'>
                         O ecossistema <strong class='text-slate-800 font-semibold'>SENAI VR</strong> está operando em capacidade total. Selecione uma das plataformas abaixo para iniciar suas atividades.
@@ -41,7 +46,7 @@ $conteudo = "
                 </div>
 
                 <div class='hidden lg:flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-2xl border border-slate-200/60 text-xs text-slate-500 font-medium'>
-                    <span class='w-2 h-2 rounded-full bg-emerald-500 animate-pulse'></span>
+                    <span class='w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]'></span>
                     Servidor Principal: ATIVO
                 </div>
             </div>
@@ -99,14 +104,29 @@ $conteudo = "
 
         <!-- FOOTER / STATUS BAR -->
         <section class='bg-white px-6 py-4 rounded-2xl border border-slate-200/80 shadow-sm'>
-            <div class='flex items-center justify-between flex-wrap gap-3'>
+            <div class='flex items-center justify-between flex-wrap gap-4'>
+                <!-- Status principal -->
                 <div class='flex items-center gap-3'>
                     <span class='relative flex h-2.5 w-2.5'>
                         <span class='animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75'></span>
-                        <span class='relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500'></span>
+                        <span class='relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 shadow-[0_0_8px_#10b981]'></span>
                     </span>
-                    <span class='text-xs font-bold text-slate-600 uppercase tracking-wider'>Status dos Serviços</span>
+                    <span class='text-xs font-bold text-slate-700 uppercase tracking-wider'>Status dos Serviços</span>
                 </div>
+
+                <!-- Métricas do Sistema -->
+                <div class='hidden sm:flex items-center gap-6 text-xs text-slate-500'>
+                    <div class='flex items-center gap-2'>
+                        <span class='w-2 h-2 rounded-full bg-emerald-500'></span>
+                        <span>Óculos Conectados: <strong class='text-slate-700'>12/12</strong></span>
+                    </div>
+                    <div class='flex items-center gap-2'>
+                        <span class='w-2 h-2 rounded-full bg-cyan-500'></span>
+                        <span>Latência: <strong class='text-slate-700'>14ms</strong></span>
+                    </div>
+                </div>
+
+                <!-- Data de Sincronização -->
                 <div class='text-slate-400 text-xs font-mono tracking-tight flex items-center gap-2 bg-slate-50 px-3 py-1 rounded-lg border border-slate-100'>
                     <span>ÚLTIMA SINCRONIZAÇÃO:</span>
                     <strong class='text-slate-600'>" . date('d/m/Y H:i') . "</strong>
