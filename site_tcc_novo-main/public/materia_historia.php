@@ -13,26 +13,77 @@ if (file_exists(__DIR__ . '/layout.php')) {
 }
 
 // ==========================================================
-// LISTA DE VÍDEOS (ADICIONE NOVOS VÍDEOS NESTE ARRAY)
+// DEFINIÇÃO DOS LINKS MOZAIK 3D (HISTÓRIA)
+// ==========================================================
+$mozaik_cavalo_troia_url       = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Cavalo_de_Troia-146821?mode=directlink";
+$mozaik_peste_negra_url        = "https://us.mozaweb.com/pt/Extra-Cenas_3D-A_Peste_Negra_Europa_1347_1353-252339?mode=directlink";
+$mozaik_engenhos_cerco_url     = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Engenhos_de_cerco-4731033?mode=directlink";
+$mozaik_santa_maria_url        = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Santa_Maria_Seculo_XV-12045?mode=directlink";
+$mozaik_descobrimentos_url     = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Descobrimentos_seculos_XV_XVII-45111?mode=directlink";
+$mozaik_revolucao_ind_url      = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Extracao_mineira_durante_a_Revolucao_Industrial-45113?mode=directlink";
+$mozaik_guerras_napoleao_url   = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Guerras_Napoleonicas-276395?mode=directlink";
+$mozaik_muro_berlim_url        = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Muro_de_Berlim_1961_1989-12037?mode=directlink";
+
+// ==========================================================
+// LISTA DE VÍDEOS E CONTEÚDOS 3D (ORDEM CRONOLÓGICA)
 // ==========================================================
 $videos_historia = [
     [
-        'titulo' => 'Tour Virtual por Roma Antiga',
-        'subtitulo' => 'VIAGEM TEMPORAL • VR 360° • 08:20',
-        'video_id' => 'qreR7VvI-X8',
-        'embed_url' => 'https://www.youtube.com/embed/qreR7VvI-X8',
-        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://youtu.be/qreR7VvI-X8'
+        'titulo' => 'O Cavalo de Tróia',
+        'subtitulo' => 'GRÉCIA ANTIGA E MITOLOGIA (SÉC. XII a.C.) • MOZAIK 3D',
+        'video_id' => 'cavalo_troia_3d',
+        'embed_url' => $mozaik_cavalo_troia_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_cavalo_troia_url)
     ],
-    // Para adicionar mais vídeos de história no futuro, basta descomentar e preencher abaixo:
-    /*
     [
-        'titulo' => 'Explorando as Pirâmides do Egito',
-        'subtitulo' => 'EXPLORAÇÃO ARQUEOLÓGICA • VR 360° • 06:15',
-        'video_id' => 'OUTRO_ID_AQUI',
-        'embed_url' => 'https://www.youtube.com/embed/OUTRO_ID_AQUI',
-        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://youtu.be/OUTRO_ID_AQUI'
+        'titulo' => 'A Peste Negra na Europa (1347 - 1353)',
+        'subtitulo' => 'IDADE MÉDIA • MOZAIK 3D',
+        'video_id' => 'peste_negra_3d',
+        'embed_url' => $mozaik_peste_negra_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_peste_negra_url)
     ],
-    */
+    [
+        'titulo' => 'Engenhos de Cerco Medievais',
+        'subtitulo' => 'IDADE MÉDIA E TECNOLOGIA MILITAR • MOZAIK 3D',
+        'video_id' => 'engenhos_cerco_3d',
+        'embed_url' => $mozaik_engenhos_cerco_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_engenhos_cerco_url)
+    ],
+    [
+        'titulo' => 'A Nau Santa Maria',
+        'subtitulo' => 'SÉCULO XV E ERA DOS DESCOBRIMENTOS • MOZAIK 3D',
+        'video_id' => 'santa_maria_3d',
+        'embed_url' => $mozaik_santa_maria_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_santa_maria_url)
+    ],
+    [
+        'titulo' => 'Grandes Navegações e Descobrimentos',
+        'subtitulo' => 'SÉCULOS XV A XVII • MOZAIK 3D',
+        'video_id' => 'descobrimentos_3d',
+        'embed_url' => $mozaik_descobrimentos_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_descobrimentos_url)
+    ],
+    [
+        'titulo' => 'Mineração na Revolução Industrial',
+        'subtitulo' => 'SÉCULO XVIII E XIX • MOZAIK 3D',
+        'video_id' => 'extracao_mineira_3d',
+        'embed_url' => $mozaik_revolucao_ind_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_revolucao_ind_url)
+    ],
+    [
+        'titulo' => 'As Guerras Napoleônicas',
+        'subtitulo' => 'INÍCIO DO SÉCULO XIX (1803 - 1815) • MOZAIK 3D',
+        'video_id' => 'guerras_napoleonicas_3d',
+        'embed_url' => $mozaik_guerras_napoleao_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_guerras_napoleao_url)
+    ],
+    [
+        'titulo' => 'O Muro de Berlim (1961 - 1989)',
+        'subtitulo' => 'GUERRA FRIA E SÉCULO XX • MOZAIK 3D',
+        'video_id' => 'muro_berlim_3d',
+        'embed_url' => $mozaik_muro_berlim_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_muro_berlim_url)
+    ]
 ];
 
 // Configurações Globais da Página
@@ -72,14 +123,14 @@ ob_start();
             <div class="bg-white rounded-3xl shadow-sm border border-rose-100 overflow-hidden hover:shadow-md transition-all">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 items-center">
                     
-                    <!-- Coluna do Vídeo (8 colunas no desktop) -->
+                    <!-- Coluna do Vídeo / Iframe (8 colunas no desktop) -->
                     <div class="lg:col-span-8">
                         <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-inner">
                             <iframe 
                                 class="w-full h-full border-0" 
                                 src="<?php echo $video['embed_url']; ?>" 
                                 title="<?php echo $video['titulo']; ?>"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; xr-spatial-tracking; webxr; fullscreen" 
                                 allowfullscreen>
                             </iframe>
                         </div>
@@ -113,3 +164,4 @@ ob_start();
 $conteudo = ob_get_clean();
 renderizar_pagina($titulo_pagina, $conteudo);
 ?>
+

@@ -13,20 +13,62 @@ if (file_exists(__DIR__ . '/layout.php')) {
 }
 
 // ==========================================================
+// DEFINIÇÃO DOS LINKS MOZAIK 3D E YOUTUBE
+// ==========================================================
+$mozaik_respiratorio_url = 'https://us.mozaweb.com/pt/Extra-Cenas_3D-em_Sistema_em_em_respi_em_ratorio-12049?mode=directlink';
+$mozaik_linfatico_url    = 'https://us.mozaweb.com/pt/Extra-Cenas_3D-em_Sistema_em_linfatico-12012?mode=directlink';
+$mozaik_nervoso_url      = 'https://us.mozaweb.com/pt/Extra-Cenas_3D-em_Sistema_em_nervoso-139731?mode=directlink';
+$mozaik_circulatorio_url = 'https://us.mozaweb.com/pt/Extra-Cenas_3D-em_Sistema_em_circulatorio-4025?mode=directlink';
+$mozaik_urinario_url     = 'https://us.mozaweb.com/pt/Extra-Cenas_3D-em_Sistema_em_urinario-4028?mode=directlink';
+$mozaik_endocrino_url    = 'https://us.mozaweb.com/pt/Extra-Cenas_3D-em_Sistema_em_endocrino-139743?mode=directlink';
+$mozaik_intestino_delgado_url = 'https://us.mozaweb.com/pt/Extra-Cenas_3D-Anatomia_do_intestino_delgado-139735?mode=directlink';
+$mozaik_estomago_url          = 'https://us.mozaweb.com/pt/Extra-Cenas_3D-O_estomago-139729?mode=directlink';
+// ==========================================================
 // LISTA DE CONTEÚDOS / VÍDEOS
 // ==========================================================
 $videos_biologia = [
-    [
-        'titulo' => 'Tyrannosaurus Rex 3D',
-        'subtitulo' => 'CENA INTERATIVA • MOZAIK 3D',
-        'embed_url' => 'https://us.mozaweb.com/Extra-cenas_3D-Tyrannosaurus_rex_tirano-170423',
-        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode('https://us.mozaweb.com/Extra-cenas_3D-Tyrannosaurus_rex_tirano-170423')
-    ],
+
     [
         'titulo' => 'Sistema Respiratório Humano 3D',
         'subtitulo' => 'ANATOMIA HUMANA • MOZAIK 3D',
-        'embed_url' => 'https://us.mozaweb.com/pt/Extra-Cenas_3D-em_Sistema_em_em_respi_em_ratorio-12049?mode=directlink',
-        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode('https://us.mozaweb.com/pt/Extra-Cenas_3D-em_Sistema_em_em_respi_em_ratorio-12049?mode=directlink')
+        'embed_url' => $mozaik_respiratorio_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_respiratorio_url)
+    ],
+    [
+        'titulo' => 'Sistema Linfático Humano 3D',
+        'subtitulo' => 'ANATOMIA HUMANA • MOZAIK 3D',
+        'embed_url' => $mozaik_linfatico_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_linfatico_url)
+    ],
+    [
+        'titulo' => 'Sistema Nervoso Humano 3D',
+        'subtitulo' => 'ANATOMIA HUMANA • MOZAIK 3D',
+        'embed_url' => $mozaik_nervoso_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_nervoso_url)
+    ],
+    [
+        'titulo' => 'Sistema Circulatório Humano 3D',
+        'subtitulo' => 'ANATOMIA HUMANA • MOZAIK 3D',
+        'embed_url' => $mozaik_circulatorio_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_circulatorio_url)
+    ],
+    [
+        'titulo' => 'Sistema Urinário Humano 3D',
+        'subtitulo' => 'ANATOMIA HUMANA • MOZAIK 3D',
+        'embed_url' => $mozaik_urinario_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_urinario_url)
+    ],
+    [
+        'titulo' => 'Sistema Endócrino Humano 3D',
+        'subtitulo' => 'ANATOMIA HUMANA • MOZAIK 3D',
+        'embed_url' => $mozaik_endocrino_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_endocrino_url)
+    ],
+    [
+        'titulo' => 'O Estômago Humano 3D',
+        'subtitulo' => 'SISTEMA DIGESTÓRIO • MOZAIK 3D',
+        'embed_url' => $mozaik_estomago_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_estomago_url)
     ],
     [
         'titulo' => 'O que acontece dentro do seu corpo?',

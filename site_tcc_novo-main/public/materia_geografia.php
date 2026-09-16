@@ -1,5 +1,3 @@
-Geografia
-
 <?php
 session_start();
 if (!isset($_SESSION['usuario_logado'])) {
@@ -15,26 +13,110 @@ if (file_exists(__DIR__ . '/layout.php')) {
 }
 
 // ==========================================================
-// LISTA DE VÍDEOS (ADICIONE NOVOS VÍDEOS NESTE ARRAY)
+// DEFINIÇÃO DOS LINKS MOZAIK 3D (GEOGRAFIA)
+// Organizados sequencialmente: Astronomia -> Estrutura da Terra -> Geologia/Tectônica -> Cartografia/Fusos -> Hidrologia/Clima -> Meio Ambiente
+// ==========================================================
+$mozaik_sol_url               = "https://us.mozaweb.com/pt/Extra-Cenas_3D-O_Sol-12027?mode=directlink";
+$mozaik_formacao_terra_url    = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Formacao_da_Terra_e_da_Lua-209803?mode=directlink";
+$mozaik_estrutura_terra_url   = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Estrutura_da_Terra_nivel_intermedio-12026?mode=directlink";
+$mozaik_placas_tectonicas_url = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Placas_tectonicas-38639?mode=directlink";
+$mozaik_falha_geologica_url   = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Falha_Geologica_intermedio-38641?mode=directlink";
+$mozaik_terremoto_url         = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Terramoto-262500?mode=directlink";
+$mozaik_coordenadas_url       = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Sistema_de_coordenadas_geograficas-12023?mode=directlink";
+$mozaik_fusos_horarios_url    = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Fusos_horarios-47119?mode=directlink";
+$mozaik_rios_relevo_url       = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Rios_e_a_formacao_do_relevo-247003?mode=directlink";
+$mozaik_ciclones_url          = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Ciclones_tropicais-47086?mode=directlink";
+$mozaik_efeito_estufa_url     = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Efeito_de_estufa-47088?mode=directlink";
+$mozaik_poluicao_url          = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Poluicao-211545?mode=directlink";
+
+// ==========================================================
+// LISTA DE VÍDEOS E CONTEÚDOS 3D (GEOGRAFIA)
 // ==========================================================
 $videos_geografia = [
     [
-        'titulo' => 'Sobrevoo Global: Relevos e Biomas',
-        'subtitulo' => 'VISÃO GLOBAL • VR 360° • 07:15',
-        'video_id' => 'I-vV99WvPrM',
-        'embed_url' => 'https://www.youtube.com/embed/I-vV99WvPrM',
-        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://youtu.be/I-vV99WvPrM'
+        'titulo' => 'O Sol',
+        'subtitulo' => 'ASTRONOMIA E SISTEMA SOLAR • MOZAIK 3D',
+        'video_id' => 'sol_3d',
+        'embed_url' => $mozaik_sol_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_sol_url)
     ],
-    // Para adicionar mais vídeos de geografia no futuro, basta descomentar e preencher abaixo:
-    /*
     [
-        'titulo' => 'Explorando Vulcões e Placas Tectônicas',
-        'subtitulo' => 'GEOLOGIA VR • 360° • 05:30',
-        'video_id' => 'OUTRO_ID_AQUI',
-        'embed_url' => 'https://www.youtube.com/embed/OUTRO_ID_AQUI',
-        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://youtu.be/OUTRO_ID_AQUI'
+        'titulo' => 'Formação da Terra e da Lua',
+        'subtitulo' => 'ASTRONOMIA E GEOLOGIA HISTÓRICA • MOZAIK 3D',
+        'video_id' => 'formacao_terra_lua_3d',
+        'embed_url' => $mozaik_formacao_terra_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_formacao_terra_url)
     ],
-    */
+    [
+        'titulo' => 'Estrutura Interna da Terra',
+        'subtitulo' => 'GEOCLIMA E GEOMORFOLOGIA • MOZAIK 3D',
+        'video_id' => 'estrutura_terra_3d',
+        'embed_url' => $mozaik_estrutura_terra_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_estrutura_terra_url)
+    ],
+    [
+        'titulo' => 'Placas Tectónicas',
+        'subtitulo' => 'TECTÔNICA DE PLACAS • MOZAIK 3D',
+        'video_id' => 'placas_tectonicas_3d',
+        'embed_url' => $mozaik_placas_tectonicas_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_placas_tectonicas_url)
+    ],
+    [
+        'titulo' => 'Falhas Geológicas',
+        'subtitulo' => 'GEOMORFOLOGIA E TECTÔNICA • MOZAIK 3D',
+        'video_id' => 'falha_geologica_3d',
+        'embed_url' => $mozaik_falha_geologica_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_falha_geologica_url)
+    ],
+    [
+        'titulo' => 'Terremotos e Abalos Sísmicos',
+        'subtitulo' => 'GEODINÂMICA E SISMOLOGIA • MOZAIK 3D',
+        'video_id' => 'terremoto_3d',
+        'embed_url' => $mozaik_terremoto_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_terremoto_url)
+    ],
+    [
+        'titulo' => 'Sistema de Coordenadas Geográficas',
+        'subtitulo' => 'CARTOGRAFIA E ORIENTAÇÃO • MOZAIK 3D',
+        'video_id' => 'coordenadas_geograficas_3d',
+        'embed_url' => $mozaik_coordenadas_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_coordenadas_url)
+    ],
+    [
+        'titulo' => 'Fusos Horários',
+        'subtitulo' => 'CARTOGRAFIA E MOVIMENTOS DA TERRA • MOZAIK 3D',
+        'video_id' => 'fusos_horarios_3d',
+        'embed_url' => $mozaik_fusos_horarios_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_fusos_horarios_url)
+    ],
+    [
+        'titulo' => 'Rios e a Formação do Relevo',
+        'subtitulo' => 'HIDROGRAFIA E EROSÃO • MOZAIK 3D',
+        'video_id' => 'rios_relevo_3d',
+        'embed_url' => $mozaik_rios_relevo_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_rios_relevo_url)
+    ],
+    [
+        'titulo' => 'Ciclones Tropicais',
+        'subtitulo' => 'CLIMATOLOGIA E METEOROLOGIA • MOZAIK 3D',
+        'video_id' => 'ciclones_tropicais_3d',
+        'embed_url' => $mozaik_ciclones_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_ciclones_url)
+    ],
+    [
+        'titulo' => 'Efeito Estufa',
+        'subtitulo' => 'CLIMATOLOGIA E MEIO AMBIENTE • MOZAIK 3D',
+        'video_id' => 'efeito_estufa_3d',
+        'embed_url' => $mozaik_efeito_estufa_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_efeito_estufa_url)
+    ],
+    [
+        'titulo' => 'Impacto Ambiental e Poluição',
+        'subtitulo' => 'GEOGRAFIA AMBIENTAL • MOZAIK 3D',
+        'video_id' => 'poluicao_3d',
+        'embed_url' => $mozaik_poluicao_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_poluicao_url)
+    ]
 ];
 
 // Configurações Globais da Página
@@ -74,14 +156,14 @@ ob_start();
             <div class="bg-white rounded-3xl shadow-sm border border-lime-100 overflow-hidden hover:shadow-md transition-all">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 items-center">
                     
-                    <!-- Coluna do Vídeo (8 colunas no desktop) -->
+                    <!-- Coluna do Vídeo / Iframe (8 colunas no desktop) -->
                     <div class="lg:col-span-8">
                         <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-inner">
                             <iframe 
                                 class="w-full h-full border-0" 
                                 src="<?php echo $video['embed_url']; ?>" 
                                 title="<?php echo $video['titulo']; ?>"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; xr-spatial-tracking; webxr; fullscreen" 
                                 allowfullscreen>
                             </iframe>
                         </div>

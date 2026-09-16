@@ -13,16 +13,86 @@ if (file_exists(__DIR__ . '/layout.php')) {
 }
 
 // ==========================================================
-// LISTA DE VÍDEOS
+// DEFINIÇÃO DOS LINKS MOZAIK 3D E VÍDEOS
+// ==========================================================
+$mozaik_mudancas_estado_url = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Mudancas_de_estado-46030?mode=directlink";
+$mozaik_reacao_cadeia_url    = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Reacao_em_cadeia-123105?mode=directlink";
+$mozaik_ligacoes_benzeno_url= "https://us.mozaweb.com/pt/Extra-Cenas_3D-Ligacoes_covalentes_nas_moleculas_de_benzeno-123110?mode=directlink";
+$mozaik_evaporacao_url      = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Evaporacao_e_ebulicao-368841?mode=directlink";
+$mozaik_eter_dietilico_url  = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Eter_dietilico_eter_C_H_O-3934?mode=directlink";
+$mozaik_metil_buteno_url    = "https://us.mozaweb.com/pt/Extra-Cenas_3D-3_metil_1_buteno_C_H-3935?mode=directlink";
+$mozaik_acido_benzoico_url  = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Acido_benzoico_C_H_COOH-3936?mode=directlink";
+$mozaik_propano_url         = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Propano_C_H-3954?mode=directlink";
+$mozaik_benzeno_url         = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Benzeno_C_H-3969?mode=directlink";
+
+// ==========================================================
+// LISTA DE VÍDEOS E CONTEÚDOS 3D (QUÍMICA)
 // ==========================================================
 $videos_quimica = [
     [
-        'titulo' => 'Viagem por Dentro de uma Reação Química',
-        'subtitulo' => 'IMERSÃO ATÔMICA • VR 360° • 04:30',
-        'video_id' => 'r7X_Vp07v-g',
-        'embed_url' => 'https://www.youtube.com/embed/r7X_Vp07v-g',
-        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://youtu.be/r7X_Vp07v-g'
+        'titulo' => 'Mudanças de Estado Físico da Matéria',
+        'subtitulo' => 'ESTADOS DA MATÉRIA • MOZAIK 3D',
+        'video_id' => 'mudancas_estado_3d',
+        'embed_url' => $mozaik_mudancas_estado_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_mudancas_estado_url)
     ],
+    [
+        'titulo' => 'Evaporação e Ebullição',
+        'subtitulo' => 'FÍSICO-QUÍMICA • MOZAIK 3D',
+        'video_id' => 'evaporacao_ebulicao_3d',
+        'embed_url' => $mozaik_evaporacao_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_evaporacao_url)
+    ],
+    [
+        'titulo' => 'Reação em Cadeia Nuclear',
+        'subtitulo' => 'QUÍMICA NUCLEAR • MOZAIK 3D',
+        'video_id' => 'reacao_cadeia_3d',
+        'embed_url' => $mozaik_reacao_cadeia_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_reacao_cadeia_url)
+    ],
+    [
+        'titulo' => 'Ligações Covalentes no Benzeno',
+        'subtitulo' => 'QUÍMICA ORGÂNICA • MOZAIK 3D',
+        'video_id' => 'ligacoes_benzeno_3d',
+        'embed_url' => $mozaik_ligacoes_benzeno_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_ligacoes_benzeno_url)
+    ],
+    
+    [
+        'titulo' => 'Éter Dietílico (C₄H₁₀O)',
+        'subtitulo' => 'ESTRUTURA MOLECULAR • MOZAIK 3D',
+        'video_id' => 'eter_dietilico_3d',
+        'embed_url' => $mozaik_eter_dietilico_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_eter_dietilico_url)
+    ],
+    [
+        'titulo' => '3-Metil-1-Buteno (C₅H₁₀)',
+        'subtitulo' => 'HIDROCARBONETOS • MOZAIK 3D',
+        'video_id' => 'metil_buteno_3d',
+        'embed_url' => $mozaik_metil_buteno_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_metil_buteno_url)
+    ],
+    [
+        'titulo' => 'Ácido Benzoico (C₆H₅COOH)',
+        'subtitulo' => 'FUNÇÕES ORGÂNICAS • MOZAIK 3D',
+        'video_id' => 'acido_benzoico_3d',
+        'embed_url' => $mozaik_acido_benzoico_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_acido_benzoico_url)
+    ],
+    [
+        'titulo' => 'Propano (C₃H₈)',
+        'subtitulo' => 'ALCANOS • MOZAIK 3D',
+        'video_id' => 'propano_3d',
+        'embed_url' => $mozaik_propano_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_propano_url)
+    ],
+    [
+        'titulo' => 'Benzeno (C₆H₆)',
+        'subtitulo' => 'COMPOSTOS AROMÁTICOS • MOZAIK 3D',
+        'video_id' => 'benzeno_3d',
+        'embed_url' => $mozaik_benzeno_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_benzeno_url)
+    ]
 ];
 
 // Configurações Globais da Página
@@ -76,14 +146,14 @@ ob_start();
                  style="border-color: <?php echo $cor_cyan_border; ?>;">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 items-center">
                     
-                    <!-- Coluna do Vídeo (8 colunas no desktop) -->
+                    <!-- Coluna do Vídeo / Iframe (8 colunas no desktop) -->
                     <div class="lg:col-span-8">
                         <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-inner">
                             <iframe 
                                 class="w-full h-full border-0" 
                                 src="<?php echo $video['embed_url']; ?>" 
                                 title="<?php echo $video['titulo']; ?>"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; xr-spatial-tracking; webxr; fullscreen" 
                                 allowfullscreen>
                             </iframe>
                         </div>
@@ -118,3 +188,4 @@ ob_start();
 $conteudo = ob_get_clean();
 renderizar_pagina($titulo_pagina, $conteudo);
 ?>
+

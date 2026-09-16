@@ -1,34 +1,6 @@
 <?php
 session_start();
 
-if (isset($_POST['action']) && $_POST['action'] === 'toggle_internet') {
-    header('Content-Type: application/json');
-    $status = $_POST['status'] ?? 'online';
-    
-    $is_windows = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
-    $output = [];
-    $return_var = 0;
-
-    if ($status === 'offline') {
-        if ($is_windows) {
-            exec('netsh interface set interface "Wi-Fi" disable', $output, $return_var);
-            exec('netsh interface set interface "Ethernet" disable', $output, $return_var);
-        } else {
-            exec('sudo nmcli networking off', $output, $return_var);
-        }
-    } else {
-        if ($is_windows) {
-            exec('netsh interface set interface "Wi-Fi" enable', $output, $return_var);
-            exec('netsh interface set interface "Ethernet" enable', $output, $return_var);
-        } else {
-            exec('sudo nmcli networking on', $output, $return_var);
-        }
-    }
-
-    echo json_encode(['success' => true, 'status' => $status]);
-    exit();
-}
-
 if (!isset($_SESSION['usuario_logado'])) {
     header("Location: ../login.php");
     exit();
@@ -43,11 +15,8 @@ if (file_exists('../layout.php')) {
 
 $nome_usuario = $_SESSION['usuario_nome'] ?? $_SESSION['usuario_logado'] ?? 'Teste';
 
-$icon_antenna     = function_exists('render_icon') ? render_icon('settings_input_antenna', 'w-4 h-4 text-cyan-600 inline-block align-middle') : '';
-$icon_security    = function_exists('render_icon') ? render_icon('security', 'w-5 h-5 text-slate-500') : '';
-
-$svg_wifi_on = '<svg class="w-8 h-8 text-emerald-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.14 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path></svg>';
-$svg_wifi_off = '<svg class="w-8 h-8 text-orange-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18M12 20h.01m-4.242-3.596a5.5 5.5 0 015.656-.828m3.987 1.838a5.498 5.498 0 00-1.127-1.01M4.929 12.929a10 10 0 0113.142-1.2m2.071 2.071a9.96 9.96 0 001.216-1.78M1.394 9.393a15 15 0 0119.544-1.353"></path></svg>';
+$icon_antenna = function_exists('render_icon') ? render_icon('settings_input_antenna', 'w-4 h-4 text-cyan-600 inline-block align-middle') : '';
+$icon_security = function_exists('render_icon') ? render_icon('security', 'w-5 h-5 text-slate-500') : '';
 
 $conteudo = <<<HTML
 <div id="kiosk-app-wrapper" class="p-6 md:p-8 animate-in fade-in duration-500 bg-transparent flex flex-col w-full">
@@ -101,7 +70,7 @@ $conteudo = <<<HTML
                 {$icon_security}
                 Controles Críticos
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
                 <!-- BOTÃO TRAVAR MENU -->
                 <button id="btn-travar" onclick="abrirModalSenha()" class="p-8 bg-white rounded-xl flex flex-col items-center justify-center gap-4 border border-slate-200 hover:bg-slate-50 transition-all group focus:outline-none shadow-sm">
@@ -123,14 +92,6 @@ $conteudo = <<<HTML
                         </svg>
                     </div>
                     <span id="privacy-text" class="text-xs font-bold uppercase tracking-wider text-slate-600 text-center">Privacidade</span>
-                </button>
-
-                <!-- BOTÃO ONLINE / OFFLINE -->
-                <button id="btn-offline" onclick="toggleOffline()" class="p-8 bg-white rounded-xl flex flex-col items-center justify-center gap-4 border border-slate-200 hover:bg-slate-50 transition-all group focus:outline-none shadow-sm">
-                    <div id="wifi-icon-container" class="w-14 h-14 rounded-lg flex items-center justify-center bg-emerald-50 transition-colors">
-                        {$svg_wifi_on}
-                    </div>
-                    <span id="wifi-text" class="text-xs font-bold uppercase tracking-wider text-emerald-600 text-center">Online</span>
                 </button>
                 
             </div>
@@ -193,16 +154,14 @@ $conteudo = <<<HTML
 </style>
 
 <script>
-    const SENHA_MESTRE = "1234";
-    const NOME_REAL_USUARIO = "{$nome_usuario}";
-    const NOME_ANONIMO = '********';
+    if (typeof SENHA_MESTRE === 'undefined') {
+        var SENHA_MESTRE = "1234";
+        var NOME_REAL_USUARIO = "{$nome_usuario}";
+        var NOME_ANONIMO = '********';
 
-    const ICON_LOCK_OPEN = `<svg class="w-8 h-8 text-cyan-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="11" width="14" height="10" rx="2" stroke-width="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2" stroke-width="2" stroke-linecap="round"/></svg>`;
-    const ICON_LOCK_CLOSED = `<svg class="w-8 h-8 text-red-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="11" width="14" height="10" rx="2" stroke-width="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4" stroke-width="2" stroke-linecap="round"/></svg>`;
-    const SVG_WIFI_ON = `{$svg_wifi_on}`;
-    const SVG_WIFI_OFF = `{$svg_wifi_off}`;
-
-    let isOffline = false;
+        var ICON_LOCK_OPEN = `<svg class="w-8 h-8 text-cyan-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="11" width="14" height="10" rx="2" stroke-width="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2" stroke-width="2" stroke-linecap="round"/></svg>`;
+        var ICON_LOCK_CLOSED = `<svg class="w-8 h-8 text-red-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="11" width="14" height="10" rx="2" stroke-width="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4" stroke-width="2" stroke-linecap="round"/></svg>`;
+    }
 
     function recarregarAplicacaoPreservandoQuiosque() {
         const wrapper = document.getElementById('kiosk-app-wrapper');
@@ -221,12 +180,7 @@ $conteudo = <<<HTML
                     wrapper.innerHTML = novoConteudo.innerHTML;
                 }
                 
-                const travado = estaMenuTravado();
-                const privacidade = localStorage.getItem('senai_privacidade_ativa') === 'true';
-                
-                aplicarPrivacidadeUI(privacidade);
-                atualizarInterfaceLock(travado);
-
+                sincronizarEstadoUI();
                 addLog('Aplicação recarregada com sucesso');
                 wrapper.style.opacity = '1';
             })
@@ -426,59 +380,7 @@ $conteudo = <<<HTML
         addLog(novoEstado ? 'Modo de privacidade ativado' : 'Modo de privacidade desativado');
     }
 
-    function toggleOffline() {
-        isOffline = !isOffline;
-        const btn = document.getElementById('btn-offline');
-        const text = document.getElementById('wifi-text');
-        const iconContainer = document.getElementById('wifi-icon-container');
-        const infoNetStatus = document.getElementById('info-net-status');
-
-        const novoStatus = isOffline ? 'offline' : 'online';
-
-        fetch(window.location.href, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({ 'action': 'toggle_internet', 'status': novoStatus })
-        }).then(response => response.json())
-          .then(data => console.log('Comando enviado:', data))
-          .catch(err => console.error('Erro:', err));
-
-        if (isOffline) {
-            btn.classList.add('bg-orange-50', 'border-orange-300');
-            text.innerText = 'OFF-LINE';
-            text.className = 'text-xs font-bold uppercase tracking-wider text-orange-600 text-center';
-            if(infoNetStatus) { infoNetStatus.innerText = "Desativado"; infoNetStatus.className = "text-sm font-bold text-orange-600 mt-1"; }
-            
-            if (iconContainer) {
-                iconContainer.className = 'w-14 h-14 rounded-lg flex items-center justify-center bg-orange-100 transition-colors';
-                iconContainer.innerHTML = SVG_WIFI_OFF;
-            }
-            addLog('Alternado para estado Off-line');
-        } else {
-            btn.classList.remove('bg-orange-50', 'border-orange-300');
-            text.innerText = 'ONLINE';
-            text.className = 'text-xs font-bold uppercase tracking-wider text-emerald-600 text-center';
-            if(infoNetStatus) { infoNetStatus.innerText = "Interface Ativa"; infoNetStatus.className = "text-sm font-bold text-emerald-600 mt-1"; }
-            
-            if (iconContainer) {
-                iconContainer.className = 'w-14 h-14 rounded-lg flex items-center justify-center bg-emerald-50 transition-colors';
-                iconContainer.innerHTML = SVG_WIFI_ON;
-            }
-            addLog('Alternado para estado On-line');
-        }
-    }
-
-    let totalSeconds = 0;
-    setInterval(() => {
-        totalSeconds++;
-        const hrs = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-        const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-        const secs = String(totalSeconds % 60).padStart(2, '0');
-        const timerEl = document.getElementById('session-timer');
-        if(timerEl) timerEl.innerText = `\${hrs}:\${mins}:\${secs}`;
-    }, 1000);
-
-    document.addEventListener('DOMContentLoaded', () => {
+    function sincronizarEstadoUI() {
         const travado = estaMenuTravado();
         const ativo = localStorage.getItem('senai_privacidade_ativa') === 'true';
         aplicarPrivacidadeUI(ativo);
@@ -487,10 +389,26 @@ $conteudo = <<<HTML
         if (travado) {
             entraTelaCheia();
         }
-        
+
         const initLogTime = document.getElementById('log-time-init');
         if(initLogTime) initLogTime.innerText = new Date().toLocaleTimeString();
-    });
+    }
+
+    if (typeof window.kioskTimerInterval === 'undefined') {
+        let totalSeconds = 0;
+        window.kioskTimerInterval = setInterval(() => {
+            totalSeconds++;
+            const hrs = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+            const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+            const secs = String(totalSeconds % 60).padStart(2, '0');
+            const timerEl = document.getElementById('session-timer');
+            if(timerEl) timerEl.innerText = `\${hrs}:\${mins}:\${secs}`;
+        }, 1000);
+    }
+
+    // Executa a sincronização imediatamente na carga do script
+    sincronizarEstadoUI();
+    document.addEventListener('DOMContentLoaded', sincronizarEstadoUI);
 </script>
 HTML;
 
@@ -552,6 +470,11 @@ $script_persistencia_global = <<<JS
                                         document.body.appendChild(newScript);
                                     });
                                 }
+
+                                // 4. FORÇA A RE-SINCRONIZAÇÃO DA INTERFACE DE QUIOSQUE
+                                if (typeof sincronizarEstadoUI === 'function') {
+                                    sincronizarEstadoUI();
+                                }
                             })
                             .catch(() => { window.location.href = urlDestino; });
                     }
@@ -568,7 +491,8 @@ $script_persistencia_global = <<<JS
         }, true);
 
         function travarTeclas(e) {
-            const modalOpen = !document.getElementById('modal-senha').classList.contains('hidden');
+            const modalSenha = document.getElementById('modal-senha');
+            const modalOpen = modalSenha && !modalSenha.classList.contains('hidden');
             if (modalOpen && (e.key === 'Enter' || e.keyCode === 13)) {
                 return true; 
             }

@@ -13,26 +13,69 @@ if (file_exists(__DIR__ . '/layout.php')) {
 }
 
 // ==========================================================
-// LISTA DE VÍDEOS (ADICIONE NOVOS VÍDEOS NESTE ARRAY)
+// DEFINIÇÃO DOS LINKS MOZAIK 3D (MATEMÁTICA)
+// ==========================================================
+$mozaik_geometria_url    = "https://us.mozaweb.com/pt/Extra-Cenas_3D-O_perimetro_a_area_a_superficie_e_o_volume-272584?mode=directlink";
+$mozaik_prod_notaveis_url = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Produtos_notaveis-147927?mode=directlink";
+$mozaik_cartesianas_url   = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Sistema_de_coordenadas_cartesianas_tridimensionais-147929?mode=directlink";
+$mozaik_cilindricos_url   = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Solidos_cilindricos-38572?mode=directlink";
+$mozaik_platonicos_url    = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Solidos_platonicos-129697?mode=directlink";
+$mozaik_tetraedro_url     = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Volume_de_um_tetraedro-147931?mode=directlink";
+$mozaik_esferas_url       = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Volume_das_esferas_demonstracao-129690?mode=directlink";
+
+// ==========================================================
+// LISTA DE VÍDEOS E CONTEÚDOS 3D (MATEMÁTICA)
 // ==========================================================
 $videos_matematica = [
     [
-        'titulo' => 'Explorando Sólidos Geométricos no Espaço',
-        'subtitulo' => 'EXPERIÊNCIA 360° • VR • 06:15',
-        'video_id' => 'q-MAnD7SjL0',
-        'embed_url' => 'https://www.youtube.com/embed/q-MAnD7SjL0',
-        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://youtu.be/q-MAnD7SjL0'
+        'titulo' => 'Perímetro, Área, Superfície e Volume',
+        'subtitulo' => 'GEOMETRIA ESPACIAL • MOZAIK 3D',
+        'video_id' => 'geometria_medidas_3d',
+        'embed_url' => $mozaik_geometria_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_geometria_url)
     ],
-    // Para adicionar mais vídeos de matemática no futuro, descomente e preencha abaixo:
-    /*
     [
-        'titulo' => 'Geometria Espacial na Prática',
-        'subtitulo' => 'AULA PRÁTICA • VR 360° • 05:00',
-        'video_id' => 'OUTRO_ID_AQUI',
-        'embed_url' => 'https://www.youtube.com/embed/OUTRO_ID_AQUI',
-        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://youtu.be/OUTRO_ID_AQUI'
+        'titulo' => 'Produtos Notáveis (Demonstração Geométrica)',
+        'subtitulo' => 'ÁLGEBRA & GEOMETRIA • MOZAIK 3D',
+        'video_id' => 'produtos_notaveis_3d',
+        'embed_url' => $mozaik_prod_notaveis_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_prod_notaveis_url)
     ],
-    */
+    [
+        'titulo' => 'Sistema de Coordenadas Cartesianas Tridimensionais',
+        'subtitulo' => 'GEOMETRIA ANALÍTICA 3D • MOZAIK 3D',
+        'video_id' => 'cartesianas_3d',
+        'embed_url' => $mozaik_cartesianas_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_cartesianas_url)
+    ],
+    [
+        'titulo' => 'Sólidos Cilíndricos',
+        'subtitulo' => 'GEOMETRIA ESPACIAL • MOZAIK 3D',
+        'video_id' => 'solidos_cilindricos_3d',
+        'embed_url' => $mozaik_cilindricos_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_cilindricos_url)
+    ],
+    [
+        'titulo' => 'Sólidos Platônicos (Poliedros Regulares)',
+        'subtitulo' => 'GEOMETRIA & POLIEDROS • MOZAIK 3D',
+        'video_id' => 'solidos_platonicos_3d',
+        'embed_url' => $mozaik_platonicos_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_platonicos_url)
+    ],
+    [
+        'titulo' => 'Cálculo do Volume de um Tetraedro',
+        'subtitulo' => 'GEOMETRIA ESPACIAL • MOZAIK 3D',
+        'video_id' => 'volume_tetraedro_3d',
+        'embed_url' => $mozaik_tetraedro_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_tetraedro_url)
+    ],
+    [
+        'titulo' => 'Demonstração do Volume de Esferas',
+        'subtitulo' => 'GEOMETRIA ESPACIAL • MOZAIK 3D',
+        'video_id' => 'volume_esferas_3d',
+        'embed_url' => $mozaik_esferas_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_esferas_url)
+    ]
 ];
 
 // Configurações Globais da Página
@@ -72,14 +115,14 @@ ob_start();
             <div class="bg-white rounded-3xl shadow-sm border border-purple-100 overflow-hidden hover:shadow-md transition-all">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 items-center">
                     
-                    <!-- Coluna do Vídeo (8 colunas no desktop) -->
+                    <!-- Coluna do Vídeo / Iframe (8 colunas no desktop) -->
                     <div class="lg:col-span-8">
                         <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-inner">
                             <iframe 
                                 class="w-full h-full border-0" 
                                 src="<?php echo $video['embed_url']; ?>" 
                                 title="<?php echo $video['titulo']; ?>"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; xr-spatial-tracking; webxr; fullscreen" 
                                 allowfullscreen>
                             </iframe>
                         </div>

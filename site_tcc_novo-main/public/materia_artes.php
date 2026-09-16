@@ -13,26 +13,69 @@ if (file_exists(__DIR__ . '/layout.php')) {
 }
 
 // ==========================================================
-// LISTA DE VÍDEOS (ADICIONE NOVOS VÍDEOS NESTE ARRAY)
+// DEFINIÇÃO DOS LINKS MOZAIK 3D (ARTES)
+// ==========================================================
+$mozaik_estatuetas_venus_url = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Estatuetas_de_Venus-216425?mode=directlink";
+$mozaik_marcos_escultura_url  = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Marcos_da_escultura-209674?mode=directlink";
+$mozaik_colunas_gregas_url    = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Tipos_de_colunas_gregas_antigas-146814?mode=directlink";
+$mozaik_atelie_da_vinci_url   = "https://us.mozaweb.com/pt/Extra-Cenas_3D-O_atelie_de_Leonardo_da_Vinci_Florenca_seculo_XVI-38597?mode=directlink";
+$mozaik_sao_basilio_url       = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Catedral_de_Sao_Basilio_Moscovo_seculo_XVI-170410?mode=directlink";
+$mozaik_taj_mahal_url         = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Taj_Mahal_Agra_seculo_XVII-147991?mode=directlink";
+$mozaik_machu_picchu_url      = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Machu_Picchu_seculo_XV-147940?mode=directlink";
+
+// ==========================================================
+// LISTA DE VÍDEOS E CONTEÚDOS 3D (ARTES)
 // ==========================================================
 $videos_artes = [
     [
-        'titulo' => 'Van Gogh: Imersão na Noite Estrelada',
-        'subtitulo' => 'TOUR EM MUSEU • VR 360° • 04:40',
-        'video_id' => '378FkEsh_sA',
-        'embed_url' => 'https://www.youtube.com/embed/378FkEsh_sA',
-        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://youtu.be/378FkEsh_sA'
+        'titulo' => 'Estatuetas de Vênus',
+        'subtitulo' => 'ARTE PRÉ-HISTÓRICA • MOZAIK 3D',
+        'video_id' => 'estatuetas_venus_3d',
+        'embed_url' => $mozaik_estatuetas_venus_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_estatuetas_venus_url)
     ],
-    // Para adicionar mais vídeos de artes no futuro, basta descomentar e preencher abaixo:
-    /*
     [
-        'titulo' => 'Galeria de Esculturas em Alta Definição',
-        'subtitulo' => 'EXPOSIÇÃO VIRTUAL • VR 360° • 05:10',
-        'video_id' => 'OUTRO_ID_AQUI',
-        'embed_url' => 'https://www.youtube.com/embed/OUTRO_ID_AQUI',
-        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://youtu.be/OUTRO_ID_AQUI'
+        'titulo' => 'Marcos da Escultura Global',
+        'subtitulo' => 'HISTÓRIA DA ESCULTURA • MOZAIK 3D',
+        'video_id' => 'marcos_escultura_3d',
+        'embed_url' => $mozaik_marcos_escultura_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_marcos_escultura_url)
     ],
-    */
+    [
+        'titulo' => 'Tipos de Colunas Gregas Antigas',
+        'subtitulo' => 'ARQUITETURA CLÁSSICA • MOZAIK 3D',
+        'video_id' => 'colunas_gregas_3d',
+        'embed_url' => $mozaik_colunas_gregas_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_colunas_gregas_url)
+    ],
+    [
+        'titulo' => 'O Ateliê de Leonardo da Vinci (Florença, Séc. XVI)',
+        'subtitulo' => 'RENASCIMENTO • MOZAIK 3D',
+        'video_id' => 'atelie_da_vinci_3d',
+        'embed_url' => $mozaik_atelie_da_vinci_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_atelie_da_vinci_url)
+    ],
+    [
+        'titulo' => 'Catedral de São Basílio (Moscou, Séc. XVI)',
+        'subtitulo' => 'ARQUITETURA ORTODOXA E RENASCENTISTA • MOZAIK 3D',
+        'video_id' => 'sao_basilio_3d',
+        'embed_url' => $mozaik_sao_basilio_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_sao_basilio_url)
+    ],
+    [
+        'titulo' => 'Taj Mahal (Agra, Séc. XVII)',
+        'subtitulo' => 'ARQUITETURA MOGOL E MONUMENTAL • MOZAIK 3D',
+        'video_id' => 'taj_mahal_3d',
+        'embed_url' => $mozaik_taj_mahal_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_taj_mahal_url)
+    ],
+    [
+        'titulo' => 'Machu Picchu (Séc. XV)',
+        'subtitulo' => 'ARQUITETURA INCA E URBANISMO • MOZAIK 3D',
+        'video_id' => 'machu_picchu_3d',
+        'embed_url' => $mozaik_machu_picchu_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_machu_picchu_url)
+    ]
 ];
 
 // Configurações Globais da Página
@@ -72,14 +115,14 @@ ob_start();
             <div class="bg-white rounded-3xl shadow-sm border border-pink-100 overflow-hidden hover:shadow-md transition-all">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 items-center">
                     
-                    <!-- Coluna do Vídeo (8 colunas no desktop) -->
+                    <!-- Coluna do Vídeo / Iframe (8 colunas no desktop) -->
                     <div class="lg:col-span-8">
                         <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-inner">
                             <iframe 
                                 class="w-full h-full border-0" 
                                 src="<?php echo $video['embed_url']; ?>" 
                                 title="<?php echo $video['titulo']; ?>"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; xr-spatial-tracking; webxr; fullscreen" 
                                 allowfullscreen>
                             </iframe>
                         </div>

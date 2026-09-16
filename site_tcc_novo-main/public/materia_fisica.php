@@ -13,26 +13,61 @@ if (file_exists(__DIR__ . '/layout.php')) {
 }
 
 // ==========================================================
-// LISTA DE VÍDEOS (ADICIONE NOVOS VÍDEOS NESTE ARRAY)
+// DEFINIÇÃO DOS LINKS MOZAIK 3D E VÍDEOS
+// ==========================================================
+$mozaik_modelo_atomico_url = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Desenvolvimento_do_modelo_atomico-123106?mode=directlink";
+$mozaik_rutherford_url     = "https://us.mozaweb.com/pt/Extra-Cenas_3D-A_experiencia_de_Rutherford-210231?mode=directlink";
+$mozaik_campainha_url      = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Campainha_eletrica-204264?mode=directlink";
+$mozaik_altifalante_url    = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Como_funciona_o_altifalante-208566?mode=directlink";
+$mozaik_geradores_url      = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Geradores_e_motores_eletricos-216860?mode=directlink";
+$mozaik_ondas_url          = "https://us.mozaweb.com/pt/Extra-Cenas_3D-Tipos_de_ondas-291105?mode=directlink";
+
+// ==========================================================
+// LISTA DE VÍDEOS E CONTEÚDOS 3D (FÍSICA)
 // ==========================================================
 $videos_fisica = [
     [
-        'titulo' => 'Leis de Newton e Força G em 360°',
-        'subtitulo' => 'SIMULAÇÃO FÍSICA • VR 360° • 05:40',
-        'video_id' => 'H9f796U_F8w',
-        'embed_url' => 'https://www.youtube.com/embed/H9f796U_F8w',
-        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://youtu.be/H9f796U_F8w'
+        'titulo' => 'Desenvolvimento do Modelo Atômico',
+        'subtitulo' => 'FÍSICA MODERNA E ATÔMICA • MOZAIK 3D',
+        'video_id' => 'modelo_atomico_3d',
+        'embed_url' => $mozaik_modelo_atomico_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_modelo_atomico_url)
     ],
-    // Para adicionar mais vídeos de física no futuro, basta desentear e preencher abaixo:
-    /*
     [
-        'titulo' => 'Termodinâmica em VR',
-        'subtitulo' => 'AULA PRÁTICA • VR 360° • 04:20',
-        'video_id' => 'OUTRO_ID_AQUI',
-        'embed_url' => 'https://www.youtube.com/embed/OUTRO_ID_AQUI',
-        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://youtu.be/OUTRO_ID_AQUI'
+        'titulo' => 'A Experiência de Rutherford',
+        'subtitulo' => 'FÍSICA MODERNA E NUCLEAR • MOZAIK 3D',
+        'video_id' => 'experiencia_rutherford_3d',
+        'embed_url' => $mozaik_rutherford_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_rutherford_url)
     ],
-    */
+    [
+        'titulo' => 'Campainha Elétrica',
+        'subtitulo' => 'ELETROMAGNETISMO • MOZAIK 3D',
+        'video_id' => 'campainha_eletrica_3d',
+        'embed_url' => $mozaik_campainha_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_campainha_url)
+    ],
+    [
+        'titulo' => 'Como Funciona o Alto-Falante',
+        'subtitulo' => 'ELETROMAGNETISMO E ACÚSTICA • MOZAIK 3D',
+        'video_id' => 'altifalante_3d',
+        'embed_url' => $mozaik_altifalante_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_altifalante_url)
+    ],
+    [
+        'titulo' => 'Geradores e Motores Elétricos',
+        'subtitulo' => 'ELETROMAGNETISMO E ENERGIA • MOZAIK 3D',
+        'video_id' => 'geradores_motores_3d',
+        'embed_url' => $mozaik_geradores_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_geradores_url)
+    ],
+    [
+        'titulo' => 'Tipos de Ondas',
+        'subtitulo' => 'ONDULATÓRIA • MOZAIK 3D',
+        'video_id' => 'tipos_de_ondas_3d',
+        'embed_url' => $mozaik_ondas_url,
+        'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_ondas_url)
+    ]
 ];
 
 // Configurações Globais da Página
@@ -72,14 +107,14 @@ ob_start();
             <div class="bg-white rounded-3xl shadow-sm border border-orange-100 overflow-hidden hover:shadow-md transition-all">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 items-center">
                     
-                    <!-- Coluna do Vídeo (8 colunas no desktop) -->
+                    <!-- Coluna do Vídeo / Iframe (8 colunas no desktop) -->
                     <div class="lg:col-span-8">
                         <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-inner">
                             <iframe 
                                 class="w-full h-full border-0" 
                                 src="<?php echo $video['embed_url']; ?>" 
                                 title="<?php echo $video['titulo']; ?>"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; xr-spatial-tracking; webxr; fullscreen" 
                                 allowfullscreen>
                             </iframe>
                         </div>
