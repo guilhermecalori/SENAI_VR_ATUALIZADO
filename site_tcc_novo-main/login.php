@@ -52,7 +52,6 @@ $icon_arrow = render_login_icon('arrow_forward', 'w-5 h-5');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SENAI VR | Iniciar sessão</title>
     
-    <!-- FORÇA SAIR DO LAYOUT SE ESTIVER CARREGADO DENTRO DE UMA CONTAINER/IFRAME DA PAINEL -->
     <script>
         if (window.top !== window.self || document.querySelector('.scroller-limpo')) {
             window.top.location.href = window.location.href;
@@ -60,108 +59,114 @@ $icon_arrow = render_login_icon('arrow_forward', 'w-5 h-5');
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Manrope', sans-serif;
-            background:
-                radial-gradient(circle at top left, rgba(8, 145, 178, 0.06), transparent 28%),
-                radial-gradient(circle at top right, rgba(59, 130, 246, 0.04), transparent 24%),
-                linear-gradient(180deg, #f0f9ff 0%, #f8fafc 100%);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: 
+                radial-gradient(circle at 12% 20%, rgba(6, 182, 212, 0.18) 0%, transparent 40%),
+                radial-gradient(circle at 88% 80%, rgba(30, 41, 59, 0.12) 0%, transparent 45%),
+                linear-gradient(135deg, #e0f2fe 0%, #f1f5f9 50%, #e2e8f0 100%);
         }
 
         .headline {
             font-family: 'Space Grotesk', sans-serif;
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.88);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.08);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
+        /* Card em tom Dark Slate (#1e293b) igual à sidebar */
+        .dark-card {
+            background-color: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
         }
 
         .input-dark {
-            background: rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(0, 0, 0, 0.10);
-            color: #0f172a;
+            background-color: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #ffffff;
         }
 
         .input-dark:focus {
-            border-color: rgba(8, 145, 178, 0.55);
-            box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.08);
+            border-color: #22d3ee;
+            box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
             outline: none;
         }
 
         .grid-faint {
             background-image:
-                linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-            background-size: 42px 42px;
-            mask-image: linear-gradient(180deg, rgba(0,0,0,0.3), transparent 80%);
+                linear-gradient(rgba(14, 116, 144, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(14, 116, 144, 0.08) 1px, transparent 1px);
+            background-size: 38px 38px;
+            mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 40%, transparent 90%);
         }
     </style>
 </head>
-<body class="text-slate-800 min-h-screen overflow-x-hidden">
-    <div class="fixed inset-0 -z-10">
+<body class="text-slate-800 min-h-screen overflow-x-hidden antialiased">
+    <!-- Luzes e Malha de Fundo Ampliadas -->
+    <div class="fixed inset-0 -z-10 overflow-hidden">
         <div class="absolute inset-0 grid-faint"></div>
-        <div class="absolute top-1/4 left-1/4 w-80 h-80 bg-cyan-400/20 blur-[120px] rounded-full"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/15 blur-[120px] rounded-full"></div>
+        <div class="absolute top-1/3 left-1/6 w-[500px] h-[500px] bg-cyan-400/25 blur-[140px] rounded-full pointer-events-none"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-blue-600/15 blur-[130px] rounded-full pointer-events-none"></div>
     </div>
 
     <main class="min-h-screen flex items-center justify-center px-4 py-8">
-        <div class="w-full max-w-6xl grid lg:grid-cols-2 gap-10 items-center">
+        <div class="w-full max-w-6xl grid lg:grid-cols-2 gap-12 items-center">
+            
+            <!-- Painel Esquerdo -->
             <section class="hidden lg:block pr-6">
-                <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 text-[10px] font-bold uppercase tracking-[0.25em] text-slate-500 mb-8">
-                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 backdrop-blur-md border border-slate-300/70 text-[10px] font-extrabold uppercase tracking-[0.25em] text-slate-600 mb-8 shadow-xs">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]"></span>
                     Sistema Educacional SENAI
-                </span>
+                </div>
 
-                <h1 class="headline text-6xl xl:text-7xl font-bold tracking-tight leading-[0.95] mb-6 text-slate-900">
+                <h1 class="headline text-6xl xl:text-7xl font-bold tracking-tight leading-[0.98] mb-6 text-slate-900">
                     Entre na<br>
                     <span class="text-cyan-600">EDUCAÇÃO IMERSIVA</span>
                 </h1>
 
-                <p class="text-slate-500 text-lg max-w-xl leading-relaxed">
+                <p class="text-slate-600 text-lg max-w-xl leading-relaxed font-medium">
                     Acesso ao ambiente de aprendizagem virtual com uma interface limpa, rápida e preparada para uma experiência mais profissional.
                 </p>
 
                 <div class="mt-10 grid grid-cols-3 gap-4 max-w-xl">
-                    <div class="rounded-2xl border border-slate-200 bg-white p-4">
-                        <p class="text-xs uppercase tracking-[0.2em] text-slate-400 mb-2">Estado</p>
-                        <p class="font-semibold text-slate-800">ONLINE</p>
+                    <div class="rounded-2xl border border-slate-300/70 bg-white/80 backdrop-blur-md p-4 shadow-xs">
+                        <p class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400 mb-2">Estado</p>
+                        <p class="font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]"></span>
+                            ONLINE
+                        </p>
                     </div>
-                    <div class="rounded-2xl border border-slate-200 bg-white p-4">
-                        <p class="text-xs uppercase tracking-[0.2em] text-slate-400 mb-2">Plataforma</p>
-                        <p class="font-semibold text-slate-800">SENAI VR</p>
+                    <div class="rounded-2xl border border-slate-300/70 bg-white/80 backdrop-blur-md p-4 shadow-xs">
+                        <p class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400 mb-2">Plataforma</p>
+                        <p class="font-bold text-slate-800">SENAI VR</p>
                     </div>
-                    <div class="rounded-2xl border border-slate-200 bg-white p-4">
-                        <p class="text-xs uppercase tracking-[0.2em] text-slate-400 mb-2">Versão</p>
-                        <p class="font-semibold text-slate-800">v2.4.0</p>
+                    <div class="rounded-2xl border border-slate-300/70 bg-white/80 backdrop-blur-md p-4 shadow-xs">
+                        <p class="text-[10px] font-extrabold uppercase tracking-[0.2em] text-slate-400 mb-2">Versão</p>
+                        <p class="font-bold text-slate-800">v2.4.0</p>
                     </div>
                 </div>
             </section>
 
+            <!-- Formulário Dark Card -->
             <section class="flex justify-center lg:justify-end">
-                <div class="glass-card w-full max-w-[460px] rounded-[2rem] p-6 sm:p-8 lg:p-10 relative overflow-hidden">
-                    <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-500 to-transparent"></div>
+                <div class="dark-card w-full max-w-[460px] rounded-[2rem] p-6 sm:p-8 lg:p-10 relative overflow-hidden">
+                    <div class="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
 
                     <div class="mb-8">
                         <div class="flex items-center gap-3 mb-2">
-                            <div class="w-11 h-11 rounded-2xl bg-cyan-50 border border-cyan-200 flex items-center justify-center text-cyan-600">
+                            <div class="w-11 h-11 rounded-2xl bg-cyan-500 flex items-center justify-center text-white shadow-md shadow-cyan-950/40">
                                 <?php echo $icon_vrpano; ?>
                             </div>
                             <div>
-                                <h2 class="headline text-2xl font-bold tracking-tight text-slate-900">SENAI VR</h2>
-                                <p class="text-sm text-slate-400">Preencha suas credenciais</p>
+                                <h2 class="headline text-2xl font-bold tracking-tight text-white">SENAI VR</h2>
+                                <p class="text-xs text-slate-300 font-medium mt-0.5">Preencha suas credenciais</p>
                             </div>
                         </div>
                     </div>
 
                     <form method="POST" class="space-y-5">
                         <div class="space-y-2">
-                            <label for="usuario" class="block text-xs uppercase tracking-[0.24em] font-bold text-cyan-600">
+                            <label for="usuario" class="block text-[10px] uppercase tracking-[0.24em] font-extrabold text-cyan-400">
                                 Nome de utilizador ou e-mail
                             </label>
                             <div class="relative">
@@ -173,13 +178,13 @@ $icon_arrow = render_login_icon('arrow_forward', 'w-5 h-5');
                                     autocomplete="username"
                                     required
                                     placeholder="exemplo@senai.com"
-                                    class="w-full rounded-2xl input-dark px-12 py-4 placeholder:text-slate-400 transition-all"
+                                    class="w-full rounded-2xl input-dark px-12 py-3.5 placeholder:text-slate-500 text-sm transition-all"
                                 >
                             </div>
                         </div>
 
                         <div class="space-y-2">
-                            <label for="senha" class="block text-xs uppercase tracking-[0.24em] font-bold text-cyan-600">
+                            <label for="senha" class="block text-[10px] uppercase tracking-[0.24em] font-extrabold text-cyan-400">
                                 Chave de acesso
                             </label>
                             <div class="relative">
@@ -191,13 +196,13 @@ $icon_arrow = render_login_icon('arrow_forward', 'w-5 h-5');
                                     autocomplete="current-password"
                                     required
                                     placeholder="••••••••"
-                                    class="w-full rounded-2xl input-dark px-12 pr-12 py-4 placeholder:text-slate-400 transition-all"
+                                    class="w-full rounded-2xl input-dark px-12 pr-12 py-3.5 placeholder:text-slate-500 text-sm transition-all"
                                 >
                                 <button
                                     type="button"
                                     id="togglePassword"
                                     aria-label="Mostrar ou ocultar senha"
-                                    class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-cyan-600 transition-colors"
+                                    class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-cyan-400 transition-colors"
                                 >
                                     <span id="toggleIcon"><?php echo $icon_visibility; ?></span>
                                 </button>
@@ -205,23 +210,23 @@ $icon_arrow = render_login_icon('arrow_forward', 'w-5 h-5');
                         </div>
 
                         <?php if ($erro): ?>
-                            <div class="rounded-2xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+                            <div class="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-xs text-red-300 font-medium">
                                 <?php echo htmlspecialchars($erro, ENT_QUOTES, 'UTF-8'); ?>
                             </div>
                         <?php endif; ?>
 
                         <button
                             type="submit"
-                            class="w-full rounded-2xl bg-cyan-600 hover:bg-cyan-500 text-white font-extrabold py-4 flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-cyan-200"
+                            class="w-full rounded-2xl bg-cyan-600 hover:bg-cyan-500 text-white font-extrabold py-4 flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.98] shadow-lg shadow-cyan-950/50 hover:shadow-cyan-500/20"
                         >
-                            Entrar
+                            <span>Entrar</span>
                             <span class="text-white"><?php echo $icon_arrow; ?></span>
                         </button>
                     </form>
 
-                    <div class="mt-8 pt-6 border-t border-slate-200 grid grid-cols-3 gap-3 text-[10px] uppercase tracking-[0.22em] text-slate-400">
+                    <div class="mt-8 pt-6 border-t border-slate-700/60 grid grid-cols-3 gap-3 text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400">
                         <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]"></span>
                             Seguro
                         </div>
                         <div class="text-center">PT-BR</div>
@@ -243,49 +248,6 @@ $icon_arrow = render_login_icon('arrow_forward', 'w-5 h-5');
             const isPassword = passwordInput.type === 'password';
             passwordInput.type = isPassword ? 'text' : 'password';
             toggleIcon.innerHTML = isPassword ? iconVisibilityOff : iconVisibility;
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // 1. FAZ A BOLINHA DO TOPO (SISTEMA EDUCACIONAL SENAI) PISCAR COM BRILHO NEON
-            const bolinhasExistentes = document.querySelectorAll('.bg-emerald-500, .bg-green-500, span[class*="rounded-full"]');
-            
-            bolinhasExistentes.forEach(bolinha => {
-                if (bolinha.offsetWidth <= 16 || bolinha.offsetHeight <= 16) {
-                    bolinha.classList.add('animate-pulse');
-                    bolinha.style.backgroundColor = '#10b981';
-                    bolinha.style.boxShadow = '0 0 8px #10b981, 0 0 16px rgba(16, 185, 129, 0.8)';
-                }
-            });
-
-            // 2. ADICIONA A BOLINHA VERDE NEON PISCANDO ANTES DA PALAVRA "ONLINE"
-            const elementosTexto = document.querySelectorAll('span, p, div, b, strong, h1, h2, h3, h4');
-
-            elementosTexto.forEach(el => {
-                if (el.children.length === 0 && el.textContent) {
-                    const texto = el.textContent.trim().toUpperCase();
-                    
-                    if (texto === 'ONLINE') {
-                        if (!el.innerHTML.includes('dot-verde-solida')) {
-                            const bolinhaHTML = `<span class="dot-verde-solida animate-pulse" style="
-                                display: inline-block;
-                                width: 10px;
-                                height: 10px;
-                                background-color: #10b981;
-                                border-radius: 50%;
-                                margin-right: 8px;
-                                vertical-align: middle;
-                                box-shadow: 0 0 8px #10b981, 0 0 16px rgba(16, 185, 129, 0.8);
-                            "></span>`;
-                            
-                            el.innerHTML = bolinhaHTML + el.textContent;
-                        }
-                    }
-                }
-            });
-            
         });
     </script>
 </body>

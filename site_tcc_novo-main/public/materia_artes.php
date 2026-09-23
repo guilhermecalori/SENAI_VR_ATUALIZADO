@@ -84,11 +84,25 @@ $subtitulo_pagina = "Exposição de Galerias Virtuais e Criação 3D";
 $icone_materia = "palette";
 
 // Ícones via render_icon ou Fallback
-$header_icon = function_exists('render_icon') ? render_icon($icone_materia, "w-8 h-8 text-pink-600") : '<span class="material-symbols-outlined text-pink-600 text-3xl">palette</span>';
+$header_icon = '<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-pink-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 0 1-9-9c0-4.97 4.03-9 9-9s9 4.03 9 9a9 9 0 0 1-9 9Z" class="hidden"/><path d="M7 21a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7Z"/><path d="M11 21a4 4 0 0 0 4-4V9.5a3.5 3.5 0 0 1 7 0V17a4 4 0 0 1-4 4h-7Z"/><circle cx="8" cy="17" r="1" fill="currentColor"/></svg>';
 $back_icon   = function_exists('render_icon') ? render_icon('arrow_back', 'w-4 h-4 text-slate-500') : '<span class="material-symbols-outlined text-sm">arrow_back</span>';
 
 ob_start();
 ?>
+
+<style>
+    /* Aplica o fundo suave com gradiente e malha quadriculada */
+    html, body, main, #app, #root, #layout-wrapper, .main-content, .content-wrapper, .wrapper {
+        background-color: #ebf3f5 !important;
+        background-image: 
+            radial-gradient(at 90% 10%, rgba(253, 226, 228, 0.6) 0px, transparent 40%),
+            radial-gradient(at 10% 20%, rgba(219, 234, 254, 0.7) 0px, transparent 50%),
+            linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px) !important;
+        background-size: 100% 100%, 100% 100%, 24px 24px, 24px 24px !important;
+        background-attachment: fixed !important;
+    }
+</style>
 
 <div class="max-w-7xl mx-auto space-y-8 p-4">
     

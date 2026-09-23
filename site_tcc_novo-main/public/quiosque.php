@@ -15,10 +15,78 @@ if (file_exists('../layout.php')) {
 
 $nome_usuario = $_SESSION['usuario_nome'] ?? $_SESSION['usuario_logado'] ?? 'Teste';
 
+// --- LISTA DE SENHAS VÁLIDAS DO SEU BANCO DE DADOS ---
+$senhas_validas = [
+    '1234',
+    'Gustavo_Historia255*',
+    'Vitor_Biologia255*',
+    'Maisa_Quimica255*'
+];
+
+// Tenta buscar a senha do usuário atual no banco para incluir na lista
+if (isset($pdo)) {
+    try {
+        $id_sessao    = $_SESSION['usuario_id'] ?? $_SESSION['id'] ?? null;
+        $email_sessao = $_SESSION['usuario_email'] ?? $_SESSION['usuario_logado'] ?? null;
+        $nome_sessao  = $_SESSION['usuario_nome'] ?? null;
+
+        $stmt = $pdo->prepare("SELECT senha FROM usuarios WHERE id = ? OR email = ? OR nome = ? LIMIT 1");
+        $stmt->execute([$id_sessao, $email_sessao, $nome_sessao]);
+        $user_db = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user_db && !empty($user_db['senha'])) {
+            $senhas_validas[] = $user_db['senha'];
+        }
+    } catch (Exception $e) {
+        // Silencia erro de conexão/consulta
+    }
+}
+
+// Converte a lista de senhas para um Array JavaScript seguro
+$senhas_validas_js = json_encode(array_values(array_unique($senhas_validas)));
+$nome_usuario_js   = json_encode((string)$nome_usuario);
+
 $icon_antenna = function_exists('render_icon') ? render_icon('settings_input_antenna', 'w-4 h-4 text-cyan-600 inline-block align-middle') : '';
 $icon_security = function_exists('render_icon') ? render_icon('security', 'w-5 h-5 text-slate-500') : '';
 
 $conteudo = <<<HTML
+<style>
+    /* Aplica o fundo com tom suave azul/rosado e malha quadriculada */
+    html, body, main, #app, #root, #layout-wrapper, .main-content, .content-wrapper, .wrapper {
+        background-color: #ebf3f5 !important;
+        background-image: 
+            radial-gradient(at 90% 10%, rgba(253, 226, 228, 0.6) 0px, transparent 40%),
+            radial-gradient(at 10% 20%, rgba(219, 234, 254, 0.7) 0px, transparent 50%),
+            linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px) !important;
+        background-size: 100% 100%, 100% 100%, 24px 24px, 24px 24px !important;
+        background-attachment: fixed !important;
+    }
+
+    #kiosk-app-wrapper {
+        background-color: transparent !important;
+    }
+
+    .btn-sair-desativado {
+        opacity: 0.4 !important;
+        cursor: not-allowed !important;
+        pointer-events: none !important;
+    }
+
+    /* Bloqueador da bolinha cinza do topo */
+    body.kiosk-locked::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 35px; /* Cobre a altura do aviso e da bolinha */
+        z-index: 999999 !important;
+        background: transparent;
+        pointer-events: all !important;
+    }
+</style>
+
 <div id="kiosk-app-wrapper" class="p-6 md:p-8 animate-in fade-in duration-500 bg-transparent flex flex-col w-full">
     <div class="max-w-5xl mx-auto w-full space-y-6">
         
@@ -145,23 +213,13 @@ $conteudo = <<<HTML
     </div>
 </div>
 
-<style>
-    .btn-sair-desativado {
-        opacity: 0.4 !important;
-        cursor: not-allowed !important;
-        pointer-events: none !important;
-    }
-</style>
-
 <script>
-    if (typeof SENHA_MESTRE === 'undefined') {
-        var SENHA_MESTRE = "1234";
-        var NOME_REAL_USUARIO = "{$nome_usuario}";
-        var NOME_ANONIMO = '********';
+    window.SENHAS_VALIDAS = {$senhas_validas_js};
+    window.NOME_REAL_USUARIO = {$nome_usuario_js};
+    window.NOME_ANONIMO = '********';
 
-        var ICON_LOCK_OPEN = `<svg class="w-8 h-8 text-cyan-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="11" width="14" height="10" rx="2" stroke-width="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2" stroke-width="2" stroke-linecap="round"/></svg>`;
-        var ICON_LOCK_CLOSED = `<svg class="w-8 h-8 text-red-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="11" width="14" height="10" rx="2" stroke-width="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4" stroke-width="2" stroke-linecap="round"/></svg>`;
-    }
+    var ICON_LOCK_OPEN = `<svg class="w-8 h-8 text-cyan-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="11" width="14" height="10" rx="2" stroke-width="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2" stroke-width="2" stroke-linecap="round"/></svg>`;
+    var ICON_LOCK_CLOSED = `<svg class="w-8 h-8 text-red-600 group-hover:scale-105 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="11" width="14" height="10" rx="2" stroke-width="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4" stroke-width="2" stroke-linecap="round"/></svg>`;
 
     function recarregarAplicacaoPreservandoQuiosque() {
         const wrapper = document.getElementById('kiosk-app-wrapper');
@@ -196,7 +254,7 @@ $conteudo = <<<HTML
         const now = new Date().toLocaleTimeString();
         const li = document.createElement('li');
         li.className = 'p-2 bg-slate-50 rounded-lg border border-slate-100 flex justify-between animate-in fade-in duration-300';
-        li.innerHTML = `<span>\${mensagem}</span><span class="text-slate-400 font-mono">\${now}</span>`;
+        li.innerHTML = '<span>' + mensagem + '</span><span class="text-slate-400 font-mono">' + now + '</span>';
         logs.prepend(li);
     }
 
@@ -263,8 +321,9 @@ $conteudo = <<<HTML
     function validarSenhaAcao() {
         const input = document.getElementById('input-senha-destrava');
         const erro = document.getElementById('erro-senha');
+        const senhaDigitada = input.value.trim();
 
-        if (input.value === SENHA_MESTRE) {
+        if (window.SENHAS_VALIDAS.includes(senhaDigitada)) {
             fecharModalSenha();
             
             if (estaMenuTravado()) {
@@ -304,6 +363,13 @@ $conteudo = <<<HTML
         const btn = document.getElementById('btn-travar');
         const iconContainer = document.getElementById('lock-icon-container');
         const infoKioskMode = document.getElementById('info-kiosk-mode');
+
+        // Adiciona/Remove classe no BODY para ativar regras estritas do CSS
+        if (travado) {
+            document.body.classList.add('kiosk-locked');
+        } else {
+            document.body.classList.remove('kiosk-locked');
+        }
 
         const elementosSair = document.querySelectorAll('a[href*="logout"], a[href*="sair"], button[onclick*="logout"], .btn-logout, #btn-sair');
         elementosSair.forEach(el => {
@@ -354,10 +420,10 @@ $conteudo = <<<HTML
         const textLabel = document.getElementById('privacy-text');
 
         document.querySelectorAll('.user-name-display').forEach(el => {
-            if (!el.dataset.nomeOriginal && el.innerText !== NOME_ANONIMO) {
+            if (!el.dataset.nomeOriginal && el.innerText !== window.NOME_ANONIMO) {
                 el.dataset.nomeOriginal = el.innerText;
             }
-            el.innerText = ativo ? NOME_ANONIMO : (el.dataset.nomeOriginal || NOME_REAL_USUARIO);
+            el.innerText = ativo ? window.NOME_ANONIMO : (el.dataset.nomeOriginal || window.NOME_REAL_USUARIO);
         });
 
         if (!btn) return;
@@ -402,32 +468,61 @@ $conteudo = <<<HTML
             const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
             const secs = String(totalSeconds % 60).padStart(2, '0');
             const timerEl = document.getElementById('session-timer');
-            if(timerEl) timerEl.innerText = `\${hrs}:\${mins}:\${secs}`;
+            if(timerEl) timerEl.innerText = hrs + ':' + mins + ':' + secs;
         }, 1000);
     }
 
-    // Executa a sincronização imediatamente na carga do script
     sincronizarEstadoUI();
     document.addEventListener('DOMContentLoaded', sincronizarEstadoUI);
 </script>
 HTML;
 
-/**
- * NAVEGAÇÃO SPA + TROCA DINÂMICA DA SIDEBAR E CONTEÚDO PRINCIPAL
- */
 $script_persistencia_global = <<<JS
 <script>
     (function() {
+        // REAQUECER TELA CHEIA CASO O NAVEGADOR SAIA POR CAUSA DO BOTÃO X
+        document.addEventListener('fullscreenchange', function() {
+            if (localStorage.getItem('senai_menu_travado') === 'true' && !document.fullscreenElement) {
+                setTimeout(function() {
+                    let elem = document.documentElement;
+                    if (elem.requestFullscreen) { elem.requestFullscreen().catch(() => {}); }
+                    else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); }
+                }, 100);
+            }
+        });
+
         document.addEventListener('click', function(e) {
-            const link = e.target.closest('a[href]');
-            
             if (localStorage.getItem('senai_menu_travado') === 'true') {
+                // Reativa a Tela Cheia se desativada
                 if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
                     let elem = document.documentElement;
                     if (elem.requestFullscreen) { elem.requestFullscreen().catch(() => {}); }
                     else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); }
                 }
 
+                // INTERCEPTAR QUALQUER BOTÃO DE SAÍDA OU BOTAO COM "X" / CLOSE
+                const targetElement = e.target.closest('button, a, div, span');
+                if (targetElement) {
+                    const ariaLabel = (targetElement.getAttribute('aria-label') || '').toLowerCase();
+                    const className = (targetElement.className || '').toString().toLowerCase();
+                    const idName    = (targetElement.id || '').toLowerCase();
+
+                    const ehBotaoFechar = ariaLabel.includes('close') || ariaLabel.includes('fechar') || 
+                                          className.includes('close') || idName.includes('close') ||
+                                          targetElement.innerText.trim() === '✕' || targetElement.innerText.trim() === 'X';
+
+                    const modalSenha = document.getElementById('modal-senha');
+                    const modalAberto = modalSenha && !modalSenha.classList.contains('hidden');
+
+                    if (ehBotaoFechar && !modalAberto) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+                        return false;
+                    }
+                }
+
+                // Bloquear Sair/Logout
                 const logoutBtn = e.target.closest('a[href*="logout"], a[href*="sair"], button[onclick*="logout"], .btn-logout, #btn-sair');
                 if (logoutBtn) {
                     e.preventDefault();
@@ -435,6 +530,8 @@ $script_persistencia_global = <<<JS
                     return false;
                 }
 
+                // Navegação protegida por AJAX
+                const link = e.target.closest('a[href]');
                 if (link && link.href && !link.href.includes('#') && !link.href.includes('javascript:') && !link.href.includes('logout')) {
                     const urlDestino = link.href;
                     if (urlDestino.startsWith(window.location.origin)) {
@@ -445,23 +542,20 @@ $script_persistencia_global = <<<JS
                                 const parser = new DOMParser();
                                 const doc = parser.parseFromString(html, 'text/html');
 
-                                // 1. ATUALIZA O CONTEÚDO PRINCIPAL
                                 const novoConteudo = doc.querySelector('main') || doc.body;
                                 const mainAtual = document.querySelector('main') || document.body;
                                 if (novoConteudo && mainAtual) {
                                     mainAtual.innerHTML = novoConteudo.innerHTML;
                                 }
 
-                                // 2. SUBTITUI A BARRA LATERAL (SIDEBAR) INTEIRA
                                 const novaSidebar = doc.getElementById('sidebar') || doc.querySelector('aside');
-                                const sidebarAtual = document.getElementById('sidebar') || document.querySelector('aside');
+                                const sidebarAtual = document.getElementById('sidebar') || doc.querySelector('aside');
                                 if (novaSidebar && sidebarAtual) {
                                     sidebarAtual.innerHTML = novaSidebar.innerHTML;
                                 }
 
                                 window.history.pushState({}, '', urlDestino);
 
-                                // 3. RE-EXECUTA OS SCRIPTS DA NOVA PÁGINA
                                 if (novoConteudo) {
                                     novoConteudo.querySelectorAll('script').forEach(oldScript => {
                                         const newScript = document.createElement('script');
@@ -471,7 +565,6 @@ $script_persistencia_global = <<<JS
                                     });
                                 }
 
-                                // 4. FORÇA A RE-SINCRONIZAÇÃO DA INTERFACE DE QUIOSQUE
                                 if (typeof sincronizarEstadoUI === 'function') {
                                     sincronizarEstadoUI();
                                 }
@@ -515,7 +608,7 @@ $script_persistencia_global = <<<JS
 
                 const isDevTools = (e.ctrlKey || e.metaKey) && (
                     (e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
-                    (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S' || e.key === 'r' || e.key === 'R')
+                    (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'R' || e.key === 'r')
                 );
 
                 if (isF12 || isF11 || isEsc || isDevTools) {
@@ -533,7 +626,7 @@ $script_persistencia_global = <<<JS
 </script>
 JS;
 
-$conteudo .= $script_persistencia_global;
+$conteudo .=$script_persistencia_global;
 
 if (function_exists('renderizar_pagina')) {
     renderizar_pagina("Modo Quiosque", $conteudo);

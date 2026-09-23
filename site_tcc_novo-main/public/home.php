@@ -6,11 +6,36 @@ if (!isset($_SESSION['usuario_logado'])) {
 }
 require_once '../layout.php';
 
-$nome_usuario = $_SESSION['usuario_nome'] ?? 'Estudante';
+// 1. Pega o nome do utilizador salvo na sessão
+$nome_usuario = $_SESSION['usuario_nome'] ?? $_SESSION['nome'] ?? 'Usuário';
 
-// Lógica de perfil (Aluno / Professor)
-$tipo_usuario = strtolower($_GET['tipo'] ?? $_SESSION['usuario_tipo'] ?? 'aluno');
-$is_professor = ($tipo_usuario === 'professor' || $tipo_usuario === 'docente');
+// 2. Identifica o e-mail guardado na sessão
+$email_usuario = strtolower(
+    $_SESSION['usuario_email'] ?? 
+    $_SESSION['email'] ?? 
+    $_SESSION['user_email'] ?? ''
+);
+
+// 3. Identifica o tipo do utilizador salvo na sessão ou via parâmetro GET
+$tipo_usuario = strtolower(
+    $_GET['tipo'] ?? 
+    $_SESSION['usuario_tipo'] ?? 
+    $_SESSION['tipo'] ?? 
+    $_SESSION['nivel'] ?? 
+    $_SESSION['perfil'] ?? ''
+);
+
+// 4. Lógica para identificar se é Professor ou Aluno:
+// O perfil assume "Professor" se o tipo for definido como tal OU se o email/nome contiver termos chave (ex: 'vitor', 'prof', 'docente')
+$is_professor = (
+    in_array($tipo_usuario, ['professor', 'docente', 'instrutor', 'admin']) ||
+    str_contains($email_usuario, 'prof') ||
+    str_contains($email_usuario, 'docente') ||
+    str_contains($email_usuario, 'vitor') || 
+    str_contains(strtolower($nome_usuario), 'vitor')
+);
+
+// Define o texto exacto a ser exibido no badge
 $rotulo_painel = $is_professor ? 'Painel do Professor' : 'Painel do Aluno';
 
 // Ícones
@@ -23,11 +48,21 @@ $icon_arrow_purple = render_icon('arrow_forward', 'w-4 h-4 text-purple-600 group
 $icon_arrow_emer   = render_icon('arrow_forward', 'w-4 h-4 text-emerald-600 group-hover:translate-x-1 transition-transform');
 
 $conteudo = "
-<div class='p-6 md:p-8 animate-in fade-in duration-500 flex flex-col h-[calc(100vh-120px)] overflow-y-auto scroller-limpo'>
+<!-- PASSO 3: Link para o arquivo CSS global em /css/style.css -->
+<link rel='stylesheet' href='../css/style.css'>
+
+<!-- PASSO 4: Estrutura visual de fundo com luzes e malha -->
+<div class='fixed inset-0 -z-10 pointer-events-none overflow-hidden'>
+    <div class='absolute inset-0 grid-faint-interno'></div>
+    <div class='absolute -top-20 -left-20 w-[400px] h-[400px] bg-cyan-400/15 blur-[120px] rounded-full'></div>
+    <div class='absolute bottom-0 right-0 w-[500px] h-[500px] bg-slate-400/15 blur-[140px] rounded-full'></div>
+</div>
+
+<div class='p-6 md:p-8 animate-in fade-in duration-500 flex flex-col h-[calc(100vh-120px)] overflow-y-auto scroller-limpo relative z-10'>
     <div class='max-w-6xl mx-auto w-full flex flex-col h-full justify-between space-y-6'>
         
         <!-- CABEÇALHO BOAS-VINDAS -->
-        <header class='relative p-8 md:p-10 rounded-3xl border border-slate-200/80 shadow-sm bg-white overflow-hidden shrink-0'>
+        <header class='relative p-8 md:p-10 rounded-3xl border border-slate-200/80 shadow-sm bg-white/90 backdrop-blur-md overflow-hidden shrink-0'>
             <div class='absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-cyan-500/10 to-transparent blur-3xl pointer-events-none rounded-full'></div>
             
             <div class='relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4'>
@@ -37,15 +72,15 @@ $conteudo = "
                             {$icon_badge} {$rotulo_painel}
                         </span>
                     </div>
-                    <h1 class='text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight'>
-                        Olá, <span class='user-name-display text-slate-900 font-extrabold'>{$nome_usuario}</span>!
+                    <h1 class='text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight'>
+                        Olá, <span class='user-name-display text-slate-900 font-extrabold inline-block max-w-[280px] sm:max-w-none truncate align-bottom'>{$nome_usuario}</span>!
                     </h1>
                     <p class='text-slate-500 text-sm md:text-base max-w-2xl leading-relaxed mt-2'>
                         O ecossistema <strong class='text-slate-800 font-semibold'>SENAI VR</strong> está operando em capacidade total. Selecione uma das plataformas abaixo para iniciar suas atividades.
                     </p>
                 </div>
 
-                <div class='hidden lg:flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-2xl border border-slate-200/60 text-xs text-slate-500 font-medium'>
+                <div class='hidden lg:flex items-center gap-2 px-4 py-2 bg-slate-50/80 rounded-2xl border border-slate-200/60 text-xs text-slate-500 font-medium'>
                     <span class='w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]'></span>
                     Servidor Principal: ATIVO
                 </div>
@@ -56,9 +91,9 @@ $conteudo = "
         <div class='grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 my-2'>
             
             <!-- CARD MANUAL TÉCNICO -->
-            <a href='tutorial.php' class='bg-white p-7 rounded-3xl border border-slate-200/80 hover:border-cyan-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between'>
+            <a href='tutorial.php' class='bg-white/90 backdrop-blur-md p-7 rounded-3xl border border-slate-200/80 hover:border-cyan-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between block cursor-pointer'>
                 <div>
-                    <div class='w-14 h-14 bg-cyan-50 border border-cyan-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-cyan-600 group-hover:text-white transition-colors duration-300 shadow-sm'>
+                    <div class='w-14 h-14 bg-cyan-50/80 border border-cyan-200/60 group-hover:border-cyan-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-105 transition-all duration-300 shadow-xs'>
                         {$icon_stories}
                     </div>
                     <h3 class='text-xl font-bold text-slate-900 mb-2 group-hover:text-cyan-700 transition-colors'>Manual Técnico</h3>
@@ -70,13 +105,13 @@ $conteudo = "
                 </div>
             </a>
 
-            <!-- CARD CHAT NEURAL -->
-            <a href='dashboard.php' class='bg-white p-7 rounded-3xl border border-slate-200/80 hover:border-purple-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between'>
+            <!-- CARD CHAT IMERSIVO -->
+            <a href='dashboard.php' class='bg-white/90 backdrop-blur-md p-7 rounded-3xl border border-slate-200/80 hover:border-purple-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between block cursor-pointer'>
                 <div>
-                    <div class='w-14 h-14 bg-purple-50 border border-purple-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300 shadow-sm'>
+                    <div class='w-14 h-14 bg-purple-50/80 border border-purple-200/60 group-hover:border-purple-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-105 transition-all duration-300 shadow-xs'>
                         {$icon_forum}
                     </div>
-                    <h3 class='text-xl font-bold text-slate-900 mb-2 group-hover:text-purple-700 transition-colors'>Chat Neural</h3>
+                    <h3 class='text-xl font-bold text-slate-900 mb-2 group-hover:text-purple-700 transition-colors'>Chat Imersivo</h3>
                     <p class='text-slate-500 text-xs md:text-sm leading-relaxed'>Tire dúvidas com o assistente virtual em tempo real sobre os experimentos teóricos.</p>
                 </div>
                 <div class='flex items-center justify-between text-purple-600 text-xs font-bold uppercase tracking-wider mt-6 pt-4 border-t border-slate-100'>
@@ -86,9 +121,9 @@ $conteudo = "
             </a>
 
             <!-- CARD MODO QUIOSQUE -->
-            <a href='quiosque.php' class='bg-white p-7 rounded-3xl border border-slate-200/80 hover:border-emerald-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between'>
+            <a href='quiosque.php' class='bg-white/90 backdrop-blur-md p-7 rounded-3xl border border-slate-200/80 hover:border-emerald-400 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between block cursor-pointer'>
                 <div>
-                    <div class='w-14 h-14 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300 shadow-sm'>
+                    <div class='w-14 h-14 bg-emerald-50/80 border border-emerald-200/60 group-hover:border-emerald-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-105 transition-all duration-300 shadow-xs'>
                         {$icon_display}
                     </div>
                     <h3 class='text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-700 transition-colors'>Modo Quiosque</h3>
@@ -103,7 +138,7 @@ $conteudo = "
         </div>
 
         <!-- FOOTER / STATUS BAR -->
-        <section class='bg-white px-6 py-4 rounded-2xl border border-slate-200/80 shadow-sm'>
+        <section class='bg-white/90 backdrop-blur-md px-6 py-4 rounded-2xl border border-slate-200/80 shadow-sm'>
             <div class='flex items-center justify-between flex-wrap gap-4'>
                 <!-- Status principal -->
                 <div class='flex items-center gap-3'>
@@ -127,7 +162,7 @@ $conteudo = "
                 </div>
 
                 <!-- Data de Sincronização -->
-                <div class='text-slate-400 text-xs font-mono tracking-tight flex items-center gap-2 bg-slate-50 px-3 py-1 rounded-lg border border-slate-100'>
+                <div class='text-slate-400 text-xs font-mono tracking-tight flex items-center gap-2 bg-slate-50/80 px-3 py-1 rounded-lg border border-slate-100'>
                     <span>ÚLTIMA SINCRONIZAÇÃO:</span>
                     <strong class='text-slate-600'>" . date('d/m/Y H:i') . "</strong>
                 </div>
