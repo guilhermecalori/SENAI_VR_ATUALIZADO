@@ -23,11 +23,11 @@ $mozaik_urinario_url     = 'https://us.mozaweb.com/pt/Extra-Cenas_3D-em_Sistema_
 $mozaik_endocrino_url    = 'https://us.mozaweb.com/pt/Extra-Cenas_3D-em_Sistema_em_endocrino-139743?mode=directlink';
 $mozaik_intestino_delgado_url = 'https://us.mozaweb.com/pt/Extra-Cenas_3D-Anatomia_do_intestino_delgado-139735?mode=directlink';
 $mozaik_estomago_url          = 'https://us.mozaweb.com/pt/Extra-Cenas_3D-O_estomago-139729?mode=directlink';
+
 // ==========================================================
 // LISTA DE CONTEÚDOS / VÍDEOS
 // ==========================================================
 $videos_biologia = [
-
     [
         'titulo' => 'Sistema Respiratório Humano 3D',
         'subtitulo' => 'ANATOMIA HUMANA • MOZAIK 3D',
@@ -70,16 +70,14 @@ $videos_biologia = [
         'embed_url' => $mozaik_estomago_url,
         'qr_code_url' => 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' . urlencode($mozaik_estomago_url)
     ],
-    
 ];
 
 // Configurações Globais da Página
 $titulo_pagina = "Biologia Imersiva";
 $subtitulo_pagina = "ANATOMIA HUMANA, BIOLOGIA CELULAR E ECOSSISTEMAS";
-$icone_materia = "microscope";
+$icone_materia = "flask-conical";
 
-// Ícones via render_icon ou Fallback
-// Ícone em SVG nativo
+// Ícone SVG nativo do Erlenmeyer
 $header_icon = '<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31L4.75 20.29A1 1 0 0 0 5.6 21.7h12.8a1 1 0 0 0 .85-1.41L14 9.31V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>';
 $back_icon   = function_exists('render_icon') ? render_icon('arrow_back', 'w-4 h-4 text-slate-500') : '<span class="material-symbols-outlined text-sm">arrow_back</span>';
 
@@ -133,6 +131,7 @@ ob_start();
                                 src="<?php echo $video['embed_url']; ?>" 
                                 title="<?php echo $video['titulo']; ?>"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; xr-spatial-tracking; webxr; fullscreen" 
+                                sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
                                 allowfullscreen>
                             </iframe>
                         </div>
