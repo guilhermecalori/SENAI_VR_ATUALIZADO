@@ -16,8 +16,7 @@ if (file_exists('../layout.php')) {
 $nome_usuario = $_SESSION['usuario_nome'] ?? $_SESSION['usuario_logado'] ?? 'Teste';
 
 // --- LISTA DE SENHAS VÁLIDAS DO SEU BANCO DE DADOS ---
-$senhas_validas = [
-    '1234',
+$senhas_validas = [ 
     'Gustavo_Historia255*',
     'Vitor_Biologia255*',
     'Maisa_Quimica255*'
