@@ -125,16 +125,35 @@ ob_start();
                     
                     <!-- Coluna do Vídeo / Iframe (8 colunas no desktop) -->
                     <div class="lg:col-span-8">
+                        
+                        <!-- Barra de Atalhos para Login e Criar Conta Mozaik -->
+                        <div class="flex flex-wrap items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-200 mb-3 gap-2 text-xs">
+                            <span class="font-medium text-slate-600">Não consegue fazer login no quadro abaixo?</span>
+                            <div class="flex items-center gap-2">
+                                <a href="https://www.mozaweb.com/pt_BR/signup" target="_blank" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-all shadow-sm">
+                                    Criar Conta Grátis
+                                </a>
+                                <a href="https://www.mozaweb.com/pt_BR/" target="_blank" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-800 text-white font-semibold rounded-lg transition-all shadow-sm">
+                                    Conecte-se
+                                </a>
+                                <a href="<?php echo $video['embed_url']; ?>" target="_blank" class="px-3 py-1.5 border border-slate-300 hover:bg-slate-100 text-slate-700 font-semibold rounded-lg transition-all">
+                                    Abrir Aula em Nova Aba ↗
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Iframe do Mozaik -->
                         <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-black shadow-inner">
                             <iframe 
                                 class="w-full h-full border-0" 
-                                src="<?php echo $video['embed_url']; ?>" 
-                                title="<?php echo $video['titulo']; ?>"
+                                src="<?php echo htmlspecialchars($video['embed_url'], ENT_QUOTES, 'UTF-8'); ?>" 
+                                title="<?php echo htmlspecialchars($video['titulo'], ENT_QUOTES, 'UTF-8'); ?>"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; xr-spatial-tracking; webxr; fullscreen" 
-                                sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
-                                allowfullscreen>
+                                allowfullscreen
+                                loading="lazy">
                             </iframe>
                         </div>
+                        
                         <div class="mt-4">
                             <h2 class="text-xl font-bold text-slate-900"><?php echo $video['titulo']; ?></h2>
                             <p class="text-xs font-semibold tracking-wider text-emerald-600 uppercase mt-1">
